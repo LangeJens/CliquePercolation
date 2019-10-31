@@ -1,0 +1,33 @@
+Package: CliquePercolation
+Version: 0.2.0
+Date: 2019-10-14
+Title: Clique Percolation for Networks
+Description: Clique percolation community detection for weighted and 
+    unweighted networks as well as threshold and plotting functions.
+    For more information see Farkas et al. (2007) <doi:10.1088/1367-2630/9/6/180>
+    and Palla et al. (2005) <doi:10.1038/nature03607>.
+Authors@R: c(
+           person("Jens", "Lange", email = "lange.jens@outlook.com",
+                  role = c("aut", "cre")),
+           person("Janis", "Zickfeld", role = c("ctb")))
+Maintainer: Jens Lange <lange.jens@outlook.com>
+License: GPL-3
+Encoding: UTF-8
+Depends:
+   R (>= 3.6.0)
+Imports:
+   colorspace,
+   graphics,
+   igraph,
+   magrittr,
+   Matrix,
+   methods,
+   Polychrome,
+   qgraph,
+   stats,
+   utils
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

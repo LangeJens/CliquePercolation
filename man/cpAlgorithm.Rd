@@ -4,8 +4,7 @@
 \alias{cpAlgorithm}
 \title{Clique Percolation Community Detection}
 \usage{
-cpAlgorithm(W, k, method = c("unweighted", "weighted",
-  "weighted.CFinder"), I)
+cpAlgorithm(W, k, method = c("unweighted", "weighted", "weighted.CFinder"), I)
 }
 \arguments{
 \item{W}{A qgraph object; see also \link[qgraph]{qgraph}}

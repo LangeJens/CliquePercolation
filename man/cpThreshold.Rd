@@ -4,9 +4,13 @@
 \alias{cpThreshold}
 \title{Optimizing \code{k} And \code{I} For Clique Percolation Community Detection}
 \usage{
-cpThreshold(W, method = c("unweighted", "weighted", "weighted.CFinder"),
-  k.range, I.range, threshold = c("largest.components.ratio", "chi",
-  "entropy"))
+cpThreshold(
+  W,
+  method = c("unweighted", "weighted", "weighted.CFinder"),
+  k.range,
+  I.range,
+  threshold = c("largest.components.ratio", "chi", "entropy")
+)
 }
 \arguments{
 \item{W}{A qgraph object; see also \link[qgraph]{qgraph}}

@@ -4,8 +4,13 @@
 \alias{cpPermuteEntropy}
 \title{Confidence Intervals Of Entropy Based On Random Permutations Of Network}
 \usage{
-cpPermuteEntropy(W, cpThreshold.object, n = 100, interval = 0.95,
-  CFinder = FALSE)
+cpPermuteEntropy(
+  W,
+  cpThreshold.object,
+  n = 100,
+  interval = 0.95,
+  CFinder = FALSE
+)
 }
 \arguments{
 \item{W}{A qgraph object; see also \link[qgraph]{qgraph}}

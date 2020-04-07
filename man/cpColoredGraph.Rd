@@ -4,10 +4,19 @@
 \alias{cpColoredGraph}
 \title{Colored Network According To Clique Percolation Communities}
 \usage{
-cpColoredGraph(W, list.of.communities, list.of.sets = NULL,
-  larger.six = FALSE, h.cp = c(0, 360 * (length(cplist) -
-  1)/length(cplist)), c.cp = 80, l.cp = 60,
-  set.palettes.size = (count_set + 1), ...)
+cpColoredGraph(
+  W,
+  list.of.communities,
+  list.of.sets = NULL,
+  larger.six = FALSE,
+  h.cp = c(0, 360 * (length(cplist) - 1)/length(cplist)),
+  c.cp = 80,
+  l.cp = 60,
+  set.palettes.size = NULL,
+  own.colors = NULL,
+  avoid.repeated.mixed.colors = FALSE,
+  ...
+)
 }
 \arguments{
 \item{W}{A qgraph object; see also \link[qgraph]{qgraph}}
@@ -45,6 +54,16 @@ smooth gradients of a set color should be generated using
 \link[colorspace:hcl_palettes]{colorspace::sequential_hcl()}; default is
 the number of pure communities of a set plus one; see Details}
 
+\item{own.colors}{Vector of hex code colors of length of \code{list.of.communities}
+(if \code{list.of.sets = NULL}) or \code{list.of.sets} (if \code{list.of.sets}
+is not NULL); if specified, colors are used for coloring the communities and no
+other colors are generated; if NULL (default), reasonable colors are generated; see
+Details}
+
+\item{avoid.repeated.mixed.colors}{Logical indicating whether it should be avoided
+that multiple mixed communities are assigned the same color; default is FALSE;
+see Details}
+
 \item{...}{any additional argument from qgraph; see also \link[qgraph]{qgraph}}
 }
 \value{
@@ -53,7 +72,7 @@ The function primarily plots the original network and colors the nodes
   Additionally, it returns a list with the following elements:
   \describe{
   \item{basic.colors.sets}{Vector with colors assigned to the elements in
-        \code{list.of.sets}, if list of sets is not NULL. Otherwise NULL is returned.}
+        \code{list.of.sets}, if \code{list.of.sets} is not NULL. Otherwise NULL is returned.}
   \item{colors.communities}{Vector with colors of the communities, namely assigned
         colors if \code{list.of.sets = NULL} or shaded and mixed colors if
         \code{list.of.sets} is not NULL.}
@@ -122,6 +141,16 @@ The function takes the results of cpAlgorithm (see also \link{cpAlgorithm}),
   produces rather good color mixing and is computationally efficient. Yet,
   results may not always be absolutely precise.
   
+  The mixing of colors for mixed communities can lead to multiple communities
+  being assigned the same color. For instance, two communities with two nodes
+  each from Sets 1 and 2 would have the same color, namely the colors assigned to
+  the sets mixed in the same proportion. This is reasonable, because these
+  communities are structurally similar. However, it can be confusing to have
+  two actually different communities with the same color. To avoid this,
+  set \code{avoid.repeated.mixed.colors = TRUE}. Doing so slightly alters the
+  ratio with which the color of a mixed community is determined, if the
+  community would have been assigned a color that was already assigned.
+  
   The fading of pure communities via sequential_hcl is a function of
   the number of sets. If there are more pure communities from a specific
   set, more faded colors will be generated. This makes coloring results hard
@@ -130,8 +159,8 @@ The function takes the results of cpAlgorithm (see also \link{cpAlgorithm}),
   sized 6, 3, and 3, all of them pure (having nodes from only one set), then
   their colors will be strong, average, and almost white respectively. If the
   same 12 nodes belong to two communities size 6 and 6, both of them pure, then
-  their colors will be strong and average to almost white. Changing the number
-  of pure communities therefore changes the color range. To circumvent that,
+  their colors will be strong and average to almost white. Different numbers
+  of pure communities therefore change the color range. To circumvent that,
   one can specify \code{set.palettes.size} to any number larger than the number
   of pure communities of a set plus one. For all sets, sequential_hcl
   then generates as many shades towards white of a respective color as specified
@@ -160,6 +189,11 @@ The function takes the results of cpAlgorithm (see also \link{cpAlgorithm}),
   the function cpColoredGraph is recommended only for very small networks
   anyways, for which \code{larger.six = FALSE} makes sense. For larger networks,
   consider plotting the community network instead (see \link{cpCommunityGraph}).
+  
+  When own.colors are specified, these colors are assigned to the elements in
+  \code{list.of.communities} (if \code{list.of.sets = NULL}) or to the elements
+  in \code{list.of.sets} (if \code{list.of.sets} is not NULL). The rest of the 
+  procedure is identical.
 }
 \examples{
 #generate qgraph object with letters as labels
@@ -201,6 +235,13 @@ results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels
                           layout = "spring", edge.labels = TRUE)
 }
 
+#own colors (red, green, and blue) assigned to the communities
+\donttest{
+results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels,
+                          own.colors = c("#FF0000","#00FF00","#0000FF"),
+                          layout = "spring", edge.labels = TRUE)
+}
+
 #define sets of nodes; nodes a to o are in Set 1 and letters p to u in Set 2
 list.of.sets <- list(letters[seq(from = 1, to = 15)],
                      letters[seq(from = 16, to = 21)])
@@ -228,6 +269,15 @@ results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels
 results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels,
                           list.of.sets = list.of.sets, set.palettes.size = 6,
                           h.cp = c(50, 210), c.cp = 70, l.cp = 70,
+                          layout = "spring", edge.labels = TRUE)
+}
+
+#own colors (red and green) assigned to the sets
+#two communities in shades of red and one community is mix of green and red (brown)
+\donttest{
+results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels,
+                          list.of.sets = list.of.sets,
+                          own.colors = c("#FF0000","#00FF00"),
                           layout = "spring", edge.labels = TRUE)
 }
 

@@ -4,9 +4,12 @@
 \alias{cpCommunityGraph}
 \title{Plotting Clique Percolation Community Network}
 \usage{
-cpCommunityGraph(list.of.communities,
-  node.size.method = c("proportional", "normal"), max.node.size = 10,
-  ...)
+cpCommunityGraph(
+  list.of.communities,
+  node.size.method = c("proportional", "normal"),
+  max.node.size = 10,
+  ...
+)
 }
 \arguments{
 \item{list.of.communities}{List object taken from results of cpAlgorithm

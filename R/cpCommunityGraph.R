@@ -70,6 +70,10 @@ cpCommunityGraph <- function(list.of.communities, node.size.method = c("proporti
   if (length(list.of.communities) < 2) {
     stop("Less than two communities. Thus, no network is plotted.")
   }
+  ###error message if node.size.method is not "proportional" or "normal"
+  if (node.size.method != "proportional" & node.size.method != "normal") {
+    stop("node.size.method must be 'proportional' or 'normal'.")
+  }
   
   #if there is more than one community...
   #create weights matrix for the network

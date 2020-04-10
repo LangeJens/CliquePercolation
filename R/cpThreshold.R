@@ -130,6 +130,19 @@
 cpThreshold <- function(W, method = c("unweighted","weighted","weighted.CFinder"), k.range, I.range,
                         threshold = c("largest.components.ratio","chi","entropy")){
   
+  ###error message if W is not a qgraph object
+  if (methods::is(W, "qgraph") == FALSE) {
+    stop("W (network object) must be a qgraph object.")
+  }
+  ###error message if method is not "unweighted", "weighted", or "weighted.CFinder"
+  if (method != "unweighted" & method != "weighted" & method != "weighted.CFinder") {
+    stop("method must be 'unweighted', 'weighted', or 'weighted.CFinder' (depending on the network).")
+  }
+  ###error message if threshold is not "largest.components.ratio", "chi", or "entropy"
+  if (threshold != "largest.components.ratio" & threshold != "chi" & threshold != "entropy") {
+    stop("threshold must be 'largest.components.ratio', 'chi', or 'entropy'.")
+  }
+  
   #function for chi formula
   formula_chi <- function(size_comm){
     size_comm_sort <- sort(size_comm)

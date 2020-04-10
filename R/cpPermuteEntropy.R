@@ -75,6 +75,11 @@
 cpPermuteEntropy <- function(W, cpThreshold.object, n = 100, interval = 0.95,
                              CFinder = FALSE) {
   
+  #error message if W is not a qgraph object
+  if (methods::is(W, "qgraph") == FALSE) {
+    stop("W (network object) must be a qgraph object.")
+  }
+  
   #error message if n is not larger than zero
   if (n <= 0) {
     stop("n must be larger than zero.")

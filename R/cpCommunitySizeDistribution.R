@@ -15,7 +15,7 @@
 #'   a list with a data frame containing all community sizes and their frequencies
 #'   (\code{size.distribution}). If \code{test.power.law = TRUE}, a test of fit of a power-law
 #'   distribution is also returned as a list object with results from fit_power_law (see
-#'   also \link[igraph]{fit_power_law}.
+#'   also \link[igraph]{fit_power_law}).
 #' 
 #' @details
 #'   The function takes the results of cpAlgorithm (see also \link{cpAlgorithm}),
@@ -25,8 +25,8 @@
 #'   
 #'   If \code{test.power.law = TRUE}, test of a fit of a power-law is performed with the
 #'   function fit_power_law (see also \link[igraph]{fit_power_law}). Fit is tested for
-#'   the entire distribution from the smallest community size k onwards (i.e., typically k
-#'   as specified in cpAlgorithm. Moreover, test uses the \code{plfit} implementation of
+#'   the entire distribution from the smallest community size onwards (i.e., typically k
+#'   as specified in cpAlgorithm). Moreover, test uses the \code{plfit} implementation of
 #'   fit_power_law. For other arguments, default values are used.
 #' 
 #' @examples

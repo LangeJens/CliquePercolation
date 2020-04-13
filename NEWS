@@ -3,6 +3,8 @@ Changes in Version 0.3.0
     - new argument own.colors allows to specify colors for communities or sets
     - new argument avoid.repeated.mixed.colors allows to avoid that mixed communities are assigned the same color
     - fixed a bug that produced an error message when there was only one pure community
+- changes to cpCommunitySizeDistribution
+    - new argument test.power.law for testing fit of power-law distribution
 - new error messages in cpCommunityGraph, cpPermuteEntropy, and cpThreshold
 
 Version 0.2.0

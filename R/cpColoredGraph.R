@@ -120,6 +120,8 @@
 #'   set \code{avoid.repeated.mixed.colors = TRUE}. Doing so slightly alters the
 #'   ratio with which the color of a mixed community is determined, if the
 #'   community would have been assigned a color that was already assigned.
+#'   This slight variation of the ratio is random. To reproduce results from a
+#'   previous run, set a seed.
 #'   
 #'   The fading of pure communities via sequential_hcl is a function of
 #'   the number of sets. If there are more pure communities from a specific
@@ -565,7 +567,6 @@ cpColoredGraph <- function(W, list.of.communities, list.of.sets = NULL, larger.s
       #minor random alteration of ratio in which colors are mixed
       #loop continues until color that will be added is not yet part of the vector of colors
       if (avoid.repeated.mixed.colors == TRUE) {
-        set.seed(4186)
         while (add_color %in% colors_communities) {
           for (q in 1:length(ratio_mix)) {
             rand_change <- round(stats::runif(1, min = -0.05, max = 0.05), 3)

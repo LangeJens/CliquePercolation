@@ -365,21 +365,15 @@ cpThreshold <- function(W, method = c("unweighted","weighted","weighted.CFinder"
   #second, add required thresholds
   
   if ("largest.components.ratio" %in% threshold) {
-    names_data_lcr <- c(names(data),"Ratio.Threshold")
-    data <- data.frame(cbind(data,ratio))
-    names(data) <- names_data_lcr
+    data <- cbind(data, Ratio.Threshold = ratio)
   }
   
   if ("chi" %in% threshold) {
-    names_data_chi <- c(names(data),"Chi.Threshold")
-    data <- data.frame(cbind(data,chi))
-    names(data) <- names_data_chi
+    data <- cbind(data, Chi.Threshold = chi)
   }
   
   if ("entropy" %in% threshold) {
-    names_data_ent <- c(names(data),"Entropy.Threshold")
-    data <- data.frame(cbind(data,entropy))
-    names(data) <- names_data_ent
+    data <- cbind(data, Entropy.Threshold = entropy)
   }
   
   return(data)

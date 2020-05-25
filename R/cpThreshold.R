@@ -139,26 +139,9 @@ cpThreshold <- function(W, method = c("unweighted","weighted","weighted.CFinder"
     stop("method must be 'unweighted', 'weighted', or 'weighted.CFinder' (depending on the network).")
   }
   ###error messages if threshold is not "largest.components.ratio", "chi", and/or "entropy"
-  threshold <- sort(threshold)
-  if (length(threshold) != 1 & length(threshold) != 2 & length(threshold) != 3) {
-    stop("The number of requested thresholds must be between 1 and 3.")
-  }
-  if (length(threshold) == 1) {
-    if (threshold != "chi" & threshold != "entropy" & threshold != "largest.components.ratio") {
-      stop("threshold must be 'largest.components.ratio', 'chi', and/or 'entropy'.")
-    }
-  }
-  if (length(threshold) == 2) {
-    if (!(all(threshold == c("chi","entropy"))) & 
-        !(all(threshold == c("chi","largest.components.ratio"))) &
-        !(all(threshold == c("entropy","largest.components.ratio")))) {
-      stop("threshold must be 'largest.components.ratio', 'chi', and/or 'entropy'.")
-    }
-  }
-  if (length(threshold) == 3) {
-    if (!(all(threshold == c("chi","entropy","largest.components.ratio")))) {
-      stop("threshold must be 'largest.components.ratio', 'chi', and/or 'entropy'.")
-    }
+  check_threshold <- all(threshold %in% c("largest.components.ratio","chi","entropy"))
+  if (check_threshold == FALSE) {
+    stop("threshold must be 'largest.components.ratio', 'chi', and/or 'entropy'.")
   }
   
   #function for chi formula
@@ -361,6 +344,9 @@ cpThreshold <- function(W, method = c("unweighted","weighted","weighted.CFinder"
       utils::setTxtProgressBar(progress_bar, progress_bar_counter)
     }
   }
+  
+  #close progress bar
+  close(progress_bar)
   
   #return data frame with respective values and add thresholds depending on request
   

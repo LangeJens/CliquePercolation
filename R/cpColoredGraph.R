@@ -121,7 +121,7 @@
 #'   ratio with which the color of a mixed community is determined, if the
 #'   community would have been assigned a color that was already assigned.
 #'   This slight variation of the ratio is random. To reproduce results from a
-#'   previous run, set a seed.
+#'   previous run, set a seed (see \link[base:set.seed]{set.seed}).
 #'   
 #'   The fading of pure communities via sequential_hcl is a function of
 #'   the number of sets. If there are more pure communities from a specific
@@ -156,7 +156,9 @@
 #'   This function generates maximally different colors in HCL space and can generate a
 #'   higher number of distinct colors. With these colors, the rest of the procedure is
 #'   identical. The seedcolors specified in Polychrome are general red, green, and
-#'   blue. Note that the Polychrome palettes are maximally distinct, thus they are
+#'   blue. As the procedure relies on randomness, you have to set a seed to reproduce
+#'   the results of a previous run (see \link[base:set.seed]{set.seed}).
+#'   Note that the Polychrome palettes are maximally distinct, thus they are
 #'   most likely not as balanced as the palettes generated with colorspace. In general,
 #'   the function cpColoredGraph is recommended only for very small networks
 #'   anyways, for which \code{larger.six = FALSE} makes sense. For larger networks,
@@ -453,7 +455,6 @@ cpColoredGraph <- function(W, list.of.communities, list.of.sets = NULL, larger.s
   if (is.null(list.of.sets) & is.null(own.colors)) {
     cplist <- list.of.communities
     if (larger.six == TRUE) {
-      set.seed(4186)
       colors_communities <- as.vector(Polychrome::createPalette(length(list.of.communities),
                                                                 c("#CC0000","#00CC00","#0000CC"),
                                                                 target = "normal"))
@@ -470,7 +471,6 @@ cpColoredGraph <- function(W, list.of.communities, list.of.sets = NULL, larger.s
     cplist <- list.of.sets
     #if no own.colors are defined...
     if (larger.six == TRUE & is.null(own.colors)) {
-      set.seed(4186)
       colors_sets <- as.vector(Polychrome::createPalette(length(list.of.sets),
                                                          c("#CC0000","#00CC00","#0000CC"),
                                                          target = "normal"))
@@ -537,49 +537,58 @@ cpColoredGraph <- function(W, list.of.communities, list.of.sets = NULL, larger.s
       } else {set_palettes[[l]] <- vector()}
     }
     #identify all pure and mixed communities
-    pure_communities <- sapply(community_sets, unique)
-    pure_communities <- sapply(pure_communities, length)
-    pure_communities <- which(pure_communities == 1)
+    pure_communities <- c()
+    for (z in 1:length(community_sets)) {
+      if (length(unique(community_sets[[z]])) == 1) {
+        pure_communities <- c(pure_communities, z)
+      }
+    }
     if (length(pure_communities) == 0) {
       mixed_communities <- c(1:length(community_sets))
     } else {mixed_communities <- c(1:length(community_sets))[-pure_communities]}
+    #if there are pure communities...
     #to each pure community, assign one color from the respective palette
     #stronger colors are assigned to larger communities
-    for (n in 1:length(list.of.sets)) {
-      selector <- which(sapply(community_sets[pure_communities], unique) == n)
-      selected_communities <- pure_communities[selector]
-      size_order <- order(sapply(community_sets[selected_communities], length), decreasing = TRUE)
-      selected_colors <- set_palettes[[n]][1:length(selected_communities)]
-      colors_communities[selected_communities] <- selected_colors[size_order]
+    if (length(pure_communities) > 0) {
+      for (n in 1:length(list.of.sets)) {
+        selector <- which(sapply(community_sets[pure_communities], unique) == n)
+        selected_communities <- pure_communities[selector]
+        size_order <- order(sapply(community_sets[selected_communities], length), decreasing = TRUE)
+        selected_colors <- set_palettes[[n]][1:length(selected_communities)]
+        colors_communities[selected_communities] <- selected_colors[size_order]
+      }
     }
+    #if there are mixed communities...
     #community entails nodes from multiple sets -> set colors mixed according to ratio of set nodes
-    for (o in mixed_communities) {
-      set_numbers <- as.numeric(unique(community_sets[[o]]))
-      basic_colors <- colors_sets[set_numbers]
-      ratio_mix <- c()
-      for (p in set_numbers) {
-        ratio_mix <- c(ratio_mix, length(which(community_sets[[o]] == p)))
-      }
-      ratio_mix <- ratio_mix/sum(ratio_mix)
-      add_color <- subColorMix(basic_colors, ratio = ratio_mix)
-      #if avoid.repeated.mixed.colors = TRUE...
-      #mixed communities with the same color need to be disentangled
-      #minor random alteration of ratio in which colors are mixed
-      #loop continues until color that will be added is not yet part of the vector of colors
-      if (avoid.repeated.mixed.colors == TRUE) {
-        while (add_color %in% colors_communities) {
-          for (q in 1:length(ratio_mix)) {
-            rand_change <- round(stats::runif(1, min = -0.05, max = 0.05), 3)
-            ratio_mix[q] <- ratio_mix[q] + rand_change
-            if (ratio_mix[q] < 0) {
-              ratio_mix[q] <- 0.001
-            }
-          }
-          ratio_mix <- ratio_mix/sum(ratio_mix)
-          add_color <- subColorMix(basic_colors, ratio = ratio_mix)
+    if (length(mixed_communities) > 0) {
+      for (o in mixed_communities) {
+        set_numbers <- as.numeric(unique(community_sets[[o]]))
+        basic_colors <- colors_sets[set_numbers]
+        ratio_mix <- c()
+        for (p in set_numbers) {
+          ratio_mix <- c(ratio_mix, length(which(community_sets[[o]] == p)))
         }
+        ratio_mix <- ratio_mix/sum(ratio_mix)
+        add_color <- subColorMix(basic_colors, ratio = ratio_mix)
+        #if avoid.repeated.mixed.colors = TRUE...
+        #mixed communities with the same color need to be disentangled
+        #minor random alteration of ratio in which colors are mixed
+        #loop continues until color that will be added is not yet part of the vector of colors
+        if (avoid.repeated.mixed.colors == TRUE) {
+          while (add_color %in% colors_communities) {
+            for (q in 1:length(ratio_mix)) {
+              rand_change <- round(stats::runif(1, min = -0.05, max = 0.05), 3)
+              ratio_mix[q] <- ratio_mix[q] + rand_change
+              if (ratio_mix[q] < 0) {
+                ratio_mix[q] <- 0.001
+              }
+            }
+            ratio_mix <- ratio_mix/sum(ratio_mix)
+            add_color <- subColorMix(basic_colors, ratio = ratio_mix)
+          }
+        }
+        colors_communities[o] <- add_color
       }
-      colors_communities[o] <- add_color
     }
   }
   #if own.colors are defined but no list.of.sets...

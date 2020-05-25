@@ -132,6 +132,9 @@ cpPermuteEntropy <- function(W, cpThreshold.object, n = 100, interval = 0.95,
     utils::setTxtProgressBar(progress_bar_permute, progress_bar_permute_counter)
   }
   
+  #close progress bar
+  close(progress_bar_permute)
+  
   #determine confidence interval based on normal distribution of extracted entropies for each k
   #extract rows of cpThreshold.object with entropy larger than upper confidence for each k
   results <- data.frame(k = numeric(),

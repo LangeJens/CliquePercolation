@@ -6,6 +6,7 @@ Changes in Version 0.3.0
 - changes to cpCommunitySizeDistribution
     - new argument test.power.law for testing fit of power-law distribution
 - new error messages in cpCommunityGraph, cpPermuteEntropy, and cpThreshold
+- extension of the package vignette
 
 Version 0.2.0
 - first version submitted to CRAN

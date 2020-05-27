@@ -151,7 +151,7 @@ The function takes the results of cpAlgorithm (see also \link{cpAlgorithm}),
   ratio with which the color of a mixed community is determined, if the
   community would have been assigned a color that was already assigned.
   This slight variation of the ratio is random. To reproduce results from a
-  previous run, set a seed (see \link[base:set.seed]{set.seed}).
+  previous run, set a seed.
   
   The fading of pure communities via sequential_hcl is a function of
   the number of sets. If there are more pure communities from a specific
@@ -187,7 +187,7 @@ The function takes the results of cpAlgorithm (see also \link{cpAlgorithm}),
   higher number of distinct colors. With these colors, the rest of the procedure is
   identical. The seedcolors specified in Polychrome are general red, green, and
   blue. As the procedure relies on randomness, you have to set a seed to reproduce
-  the results of a previous run (see \link[base:set.seed]{set.seed}).
+  the results of a previous run.
   Note that the Polychrome palettes are maximally distinct, thus they are
   most likely not as balanced as the palettes generated with colorspace. In general,
   the function cpColoredGraph is recommended only for very small networks

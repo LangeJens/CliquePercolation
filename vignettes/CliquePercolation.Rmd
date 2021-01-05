@@ -4,7 +4,7 @@ author: "Jens Lange"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Clique Percolation and Related Functions}
+  %\VignetteIndexEntry{CliquePercolation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: bibtex.bib
@@ -321,7 +321,7 @@ fit_pl_k3I.35$fit.power.law
 
 &nbsp;
 
-The Kolmogorov-Smirnov Test is not significant, $p = .20$, indicating that the hypothesis of a power-law cannot be rejected. This findings is in line with the notion that the distribution follows a power-law with $\alpha = 2.73$. Thus, we decide in favor of $k = 3$ and $I = .35$ as the optimal parameters for clique percolation.
+The Kolmogorov-Smirnov Test is not significant, $p = .20$, indicating that the hypothesis of a power-law cannot be rejected. This finding is in line with the notion that the distribution follows a power-law with $\alpha = 2.73$. Thus, we decide in favor of $k = 3$ and $I = .35$ as the optimal parameters for clique percolation.
 
 The results object not only includes lists with the communities, but also vectors for shared nodes and isolated nodes, again both with numbers as identifies of nodes (`shared.nodes.numbers`, `isolated.nodes.numbers`) or the labels (`shared.nodes.labels`, `isolated.nodes.labels`). In the example, 94 nodes are shared among communities and 9 are isolated.
 

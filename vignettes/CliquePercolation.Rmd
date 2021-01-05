@@ -356,7 +356,7 @@ For very small networks, the above procedures may not all apply. First, the rati
 
 To showcase the somewhat altered workflow with very small networks, we will use a very small, unweighted network.
 
-```{r, echo = FALSE, dpi = 300, fig.cap = "**Unweighted network with ten nodes.**", fig.align = "center", out.extra = 'style = "border:none"', out.width = "60%"}
+```{r, echo = TRUE, dpi = 300, fig.cap = "**Unweighted network with ten nodes.**", fig.align = "center", out.extra = 'style = "border:none"', out.width = "60%"}
 W <- matrix(c(0,1,1,1,0,0,0,0,0,0,
               0,0,1,1,0,0,0,0,0,0,
               0,0,0,0,0,0,0,0,0,0,

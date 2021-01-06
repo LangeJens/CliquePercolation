@@ -30,6 +30,8 @@ The structure of a network can be captured in a matrix. An undirected network of
 
 &nbsp;
 
+\small
+
 
 ```r
 library(qgraph) #version 1.6.5
@@ -40,13 +42,19 @@ W <- matrix(c(0 , .1, .3, .3,  0,  0,   0,   0,
                0,  0,  0, .1,  0, .1,  .1,   0,
                0,  0,  0, .1, .1,  0,  .1,   0,
                0,  0,  0, .1, .1, .1,   0, -.2,
-               0,  0,  0,  0,  0,  0, -.2,   0), nrow = 8, ncol = 8, byrow = TRUE)
+               0,  0,  0,  0,  0,  0, -.2,   0),
+            nrow = 8, ncol = 8, byrow = TRUE)
 rownames(W) <- letters[seq(from = 1, to = nrow(W))]
 colnames(W) <- letters[seq(from = 1, to = nrow(W))]
-W <- qgraph::qgraph(W, theme = "colorblind", cut = 0.02, edge.labels = TRUE)
+W <- qgraph::qgraph(W,
+                    theme = "colorblind",
+                    cut = 0.02,
+                    edge.labels = TRUE)
 ```
 
 ![Weighted network with eight nodes.\label{fig:fig1}](fig1.png)
+
+\normalsize
 
 &nbsp;
 
@@ -64,6 +72,8 @@ In **CliquePercolation** the `cpThreshold` function calculates entropy for a ran
 
 &nbsp;
 
+\small
+
 
 ```r
 library(CliquePercolation) #version 0.3.0
@@ -73,11 +83,15 @@ threshold <- cpThreshold(W, method = "weighted",
                          threshold = "entropy")
 ```
 
+\normalsize
+
 &nbsp;
 
 and the `cpPermuteEntropy` function runs the permutation test
 
 &nbsp;
+
+\small
 
 
 ```r
@@ -85,22 +99,25 @@ set.seed(4186)
 thresholds.permute <- cpPermuteEntropy(W, cpThreshold.object = threshold)
 ```
 
+\normalsize
+
 &nbsp;
 
 returning the combinations of $k$ and $I$ that are more surprising than chance
 
 &nbsp;
 
+\small
+
 
 ```r
 thresholds.permute$Extracted.Rows
-```
-
-```
 #>    k Intensity Number.of.Communities Number.of.Isolated.Nodes Entropy.Threshold
 #> 22 3      0.09                     2                        1          1.418564
 #> 44 4      0.09                     1                        4          1.000000
 ```
+
+\normalsize
 
 &nbsp;
 
@@ -108,10 +125,14 @@ The highest entropy results for $k = 3$ and $I = 0.09$, which can be used to run
 
 &nbsp;
 
+\small
+
 
 ```r
 cp.k3I.09 <- cpAlgorithm(W, k = 3, method = "weighted", I = 0.09)
 ```
+
+\normalsize
 
 &nbsp;
 
@@ -119,12 +140,11 @@ The algorithm identified two communities
 
 &nbsp;
 
+\small
+
 
 ```r
 cp.k3I.09$list.of.communities.labels
-```
-
-```
 #> [[1]]
 #> [1] "d" "e" "f" "g"
 #> 
@@ -132,20 +152,23 @@ cp.k3I.09$list.of.communities.labels
 #> [1] "a" "b" "c" "d"
 ```
 
+\normalsize
+
 &nbsp;
 
 with one shared node
 
 &nbsp;
 
+\small
+
 
 ```r
 cp.k3I.09$shared.nodes.labels
-```
-
-```
 #> [1] "d"
 ```
+
+\normalsize
 
 &nbsp;
 
@@ -153,14 +176,15 @@ and one isolated node.
 
 &nbsp;
 
+\small
+
 
 ```r
 cp.k3I.09$isolated.nodes.labels
-```
-
-```
 #> [1] "h"
 ```
+
+\normalsize
 
 &nbsp;
 
@@ -170,16 +194,21 @@ The function `cpColoredGraph` can visualize the results. For instance, using the
 
 &nbsp;
 
+\small
+
 
 ```r
-col_graph <- cpColoredGraph(W,
-                            list.of.communities = cp.k3I.09$list.of.communities.labels,
-                            theme = "colorblind",
-                            cut = 0.02,
-                            edge.labels = TRUE)
+col_graph <- 
+  cpColoredGraph(W,
+                 list.of.communities = cp.k3I.09$list.of.communities.labels,
+                 theme = "colorblind",
+                 cut = 0.02,
+                 edge.labels = TRUE)
 ```
 
-![Results of clique percolation algorithm.\label{fig:fig2}]fig2.png)
+![Results of clique percolation algorithm.\label{fig:fig2}](fig2.png)
+
+\normalsize
 
 &nbsp;
 

@@ -26,7 +26,7 @@ The clique percolation algorithm is not yet implemented in a package in **R** [@
 
 ## A minimal example
 
-The structure of a network can be captured in a matrix. An undirected network of $n$ nodes translates into a symmetric square $n$-by-$n$ matrix. Each element $a_{ij}$ takes the value 0, if there is no edge between nodes $i$ and $j$. If there is an edge, in a *unweighted* network, $a_{ij}$ takes the value 1, and in a *weighted* network, it takes any non-zero value. The **R** package **qgraph** [@Epskamp+et+al:2012] can visualize such networks. For instance, a weighted network with eight nodes $a$ to $h$ as depicted in Figure \autoref{fig:fig1} results from running
+The structure of a network can be captured in a matrix. An undirected network of $n$ nodes translates into a symmetric square $n$-by-$n$ matrix. Each element $a_{ij}$ takes the value 0, if there is no edge between nodes $i$ and $j$. If there is an edge, in a *unweighted* network, $a_{ij}$ takes the value 1, and in a *weighted* network, it takes any non-zero value. The **R** package **qgraph** [@Epskamp+et+al:2012] can visualize such networks. For instance, a weighted network with eight nodes $a$ to $h$ as depicted in \autoref{fig:fig1} results from running
 
 &nbsp;
 
@@ -52,7 +52,7 @@ W <- qgraph::qgraph(W, theme = "colorblind", cut = 0.02, edge.labels = TRUE)
 
 The clique percolation algorithm proceeds in two steps. First, it identifies $k$-cliques in the network, i.e., fully conntected subgraphs with $k$ nodes, when the geometric mean of their edge weights exceeds the Intensity threshold $I$. Second, communities are defined as sets of adjacent $k$-cliques, i.e., $k$-cliques that share $k - 1$ nodes, allowing some nodes to be shared by communities or to be isolated.
 
-The package **CliquePercolation** faciliates executing these steps. First, it helps identifying optimal values for $k$ and $I$. For very small networks (as in Figure \autoref{fig:fig1}), the entropy of the community partition should be maximized (treating isolated nodes as a separate community).
+The package **CliquePercolation** faciliates executing these steps. First, it helps identifying optimal values for $k$ and $I$. For very small networks (as in \autoref{fig:fig1}), the entropy of the community partition should be maximized (treating isolated nodes as a separate community).
 
 \begin{equation}
 Entropy = -\sum_{i=1}^N p_i * \log_2 p_i
@@ -94,6 +94,9 @@ returning the combinations of $k$ and $I$ that are more surprising than chance
 
 ```r
 thresholds.permute$Extracted.Rows
+```
+
+```
 #>    k Intensity Number.of.Communities Number.of.Isolated.Nodes Entropy.Threshold
 #> 22 3      0.09                     2                        1          1.418564
 #> 44 4      0.09                     1                        4          1.000000
@@ -119,6 +122,9 @@ The algorithm identified two communities
 
 ```r
 cp.k3I.09$list.of.communities.labels
+```
+
+```
 #> [[1]]
 #> [1] "d" "e" "f" "g"
 #> 
@@ -135,6 +141,9 @@ with one shared node
 
 ```r
 cp.k3I.09$shared.nodes.labels
+```
+
+```
 #> [1] "d"
 ```
 
@@ -147,6 +156,9 @@ and one isolated node.
 
 ```r
 cp.k3I.09$isolated.nodes.labels
+```
+
+```
 #> [1] "h"
 ```
 
@@ -154,17 +166,20 @@ cp.k3I.09$isolated.nodes.labels
 
 Hence, the two adjacent 3-cliques $a$--$b$--$c$ and $a$--$b$--$d$ form a community and the four adjacent 3-cliques $d$--$e$--$f$, $d$--$e$--$g$, $d$--$f$--$g$, and $e$--$f$--$g$ form another community, leading node $d$ to be shared between both communities and node $h$ to be isolated.
 
-The function `cpColoredGraph` can visualize the results. For instance, using the default color scheme, all nodes that belong to the same community get the same color, shared nodes are split in multiple parts with colors for each community they belong to, and isolated nodes are white (see Figure \autoref{fig:fig2}).
+The function `cpColoredGraph` can visualize the results. For instance, using the default color scheme, all nodes that belong to the same community get the same color, shared nodes are split in multiple parts with colors for each community they belong to, and isolated nodes are white (see \autoref{fig:fig2}).
 
 &nbsp;
 
 
 ```r
-col_graph <- cpColoredGraph(W, list.of.communities = cp.k3I.09$list.of.communities.labels,
-                            theme = "colorblind", cut = 0.02, edge.labels = TRUE)
+col_graph <- cpColoredGraph(W,
+                            list.of.communities = cp.k3I.09$list.of.communities.labels,
+                            theme = "colorblind",
+                            cut = 0.02,
+                            edge.labels = TRUE)
 ```
 
-![Results of clique percolation algorithm.\label{fig:fig2}](fig2.png)
+![Results of clique percolation algorithm.\label{fig:fig2}]fig2.png)
 
 &nbsp;
 

@@ -9,7 +9,8 @@ cpPermuteEntropy(
   cpThreshold.object,
   n = 100,
   interval = 0.95,
-  CFinder = FALSE
+  CFinder = FALSE,
+  ncores
 )
 }
 \arguments{
@@ -24,6 +25,12 @@ default is 0.95)}
 
 \item{CFinder}{logical indicating whether clique percolation for weighted networks
 should be performed as in CFinder ; see also \link{cpAlgorithm}}
+
+\item{ncores}{Numeric.
+Number of cores to use in computing results.
+Defaults to \code{parallel::detectCores() / 2} or half of your
+computer's processing power.
+Set to \code{1} to not use parallel computing}
 }
 \value{
 A list object with the following elements:

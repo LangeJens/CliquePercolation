@@ -131,8 +131,20 @@ cpThreshold <- function(W, method = c("unweighted","weighted","weighted.CFinder"
                         threshold = c("largest.components.ratio","chi","entropy")){
   
   ###error message if W is not a qgraph object
-  if (methods::is(W, "qgraph") == FALSE) {
-    stop("W (network object) must be a qgraph object.")
+  if (!isTRUE(methods::is(W, "qgraph"))) {
+    
+    #### ALEX JOSS REVIEW CODE BEGIN ####
+    #converts matrix to qgraph if input is not a qgraph object
+    W <- qgraph::qgraph(W, DoNotPlot = TRUE)
+    
+    #### ALEX JOSS REVIEW CODE END ####
+    
+    #### OLD ERROR BEGIN ####
+    
+    #stop("W (network object) must be a qgraph object.")
+    
+    #### OLD ERROR END ####
+    
   }
   ###error message if method is not "unweighted", "weighted", or "weighted.CFinder"
   if (method != "unweighted" & method != "weighted" & method != "weighted.CFinder") {

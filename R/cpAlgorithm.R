@@ -102,8 +102,20 @@
 cpAlgorithm <- function(W, k, method = c("unweighted","weighted","weighted.CFinder"), I){
   
   ###error message if W is not a qgraph object
-  if (methods::is(W, "qgraph") == FALSE) {
-    stop("W (network object) must be a qgraph object.")
+  if (!isTRUE(methods::is(W, "qgraph"))) {
+    
+    #### ALEX JOSS REVIEW CODE BEGIN ####
+    #converts matrix to qgraph if input is not a qgraph object
+    W <- qgraph::qgraph(W, DoNotPlot = TRUE)
+    
+    #### ALEX JOSS REVIEW CODE END ####
+    
+    #### OLD ERROR BEGIN ####
+    
+    #stop("W (network object) must be a qgraph object.")
+    
+    #### OLD ERROR END ####
+    
   }
   ###error message if k is not larger than 2
   if (k < 3) {

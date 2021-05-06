@@ -25,8 +25,9 @@ Imports:
    Polychrome,
    qgraph,
    stats,
-   utils
-RoxygenNote: 7.1.0
+   utils,
+   parallel
+RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown

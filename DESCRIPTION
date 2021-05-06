@@ -9,7 +9,8 @@ Description: Clique percolation community detection for weighted and
 Authors@R: c(
            person("Jens", "Lange", email = "lange.jens@outlook.com",
                   role = c("aut", "cre")),
-           person("Janis", "Zickfeld", role = c("ctb")))
+           person("Janis", "Zickfeld", role = c("ctb")),
+           person("Alexander P.", "Christensen", role = c("ctb")))
 Maintainer: Jens Lange <lange.jens@outlook.com>
 License: GPL-3
 Encoding: UTF-8
@@ -26,7 +27,8 @@ Imports:
    qgraph,
    stats,
    utils,
-   parallel
+   parallel,
+   pbapply
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,

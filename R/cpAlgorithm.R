@@ -3,7 +3,7 @@
 #' Function for clique percolation community detection algorithms for weighted
 #' and unweighted networks.
 #'
-#' @param W A qgraph object; see also \link[qgraph]{qgraph}
+#' @param W A qgraph object or a symmetric square matrix; see also \link[qgraph]{qgraph}
 #' @param k Clique size (number of nodes that should form a clique)
 #' @param method A string indicating the method to use 
 #'   (\code{"unweighted"}, \code{"weighted"}, or \code{"weighted.CFinder"}); see Details 
@@ -101,14 +101,22 @@
 
 cpAlgorithm <- function(W, k, method = c("unweighted","weighted","weighted.CFinder"), I){
   
-  ###error message if W is not a qgraph object
+  ###check whether W is a qgraph object
+  ###if not check whether matrix is symmetric and square and convert to qgraph object
   if (!isTRUE(methods::is(W, "qgraph"))) {
     
-    #### ALEX JOSS REVIEW CODE BEGIN ####
+    #error if W is a matrix but not symmetric
+    if (isSymmetric(W) == FALSE) {
+      stop("If W is a matrix, it must be symmetric.")
+    }
+    
+    #error if W is a matrix but not square
+    if (nrow(W) != ncol(W)) {
+      stop("If W is a matrix, it must be a square matrix.")
+    }
+    
     #converts matrix to qgraph if input is not a qgraph object
     W <- qgraph::qgraph(W, DoNotPlot = TRUE)
-    
-    #### ALEX JOSS REVIEW CODE END ####
     
     #### OLD ERROR BEGIN ####
     

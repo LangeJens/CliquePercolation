@@ -4,7 +4,7 @@
 #' community sizes, chi, entropy) of ranges of \code{k} and \code{I} values to help deciding
 #' for optimal \code{k} and \code{I} values.
 #' 
-#' @param W A qgraph object; see also \link[qgraph]{qgraph}
+#' @param W A qgraph object or a symmetric square matrix; see also \link[qgraph]{qgraph}
 #' @param method A string indicating the method to use 
 #'    (\code{"unweighted"}, \code{"weighted"}, or \code{"weighted.CFinder"}).
 #'    See \link{cpAlgorithm} for more information
@@ -130,14 +130,22 @@
 cpThreshold <- function(W, method = c("unweighted","weighted","weighted.CFinder"), k.range, I.range,
                         threshold = c("largest.components.ratio","chi","entropy")){
   
-  ###error message if W is not a qgraph object
+  ###check whether W is a qgraph object
+  ###if not check whether matrix is symmetric and square and convert to qgraph object
   if (!isTRUE(methods::is(W, "qgraph"))) {
+
+    #error if W is a matrix but not symmetric
+    if (isSymmetric(W) == FALSE) {
+      stop("If W is a matrix, it must be symmetric.")
+    }
     
-    #### ALEX JOSS REVIEW CODE BEGIN ####
+    #error if W is a matrix but not square
+    if (nrow(W) != ncol(W)) {
+      stop("If W is a matrix, it must be a square matrix.")
+    }
+    
     #converts matrix to qgraph if input is not a qgraph object
     W <- qgraph::qgraph(W, DoNotPlot = TRUE)
-    
-    #### ALEX JOSS REVIEW CODE END ####
     
     #### OLD ERROR BEGIN ####
     

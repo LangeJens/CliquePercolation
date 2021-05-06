@@ -5,6 +5,8 @@ Changes in Version 0.3.0
     - fixed a bug that produced an error message when there was only one pure community
 - changes to cpCommunitySizeDistribution
     - new argument test.power.law for testing fit of power-law distribution
+- cpAlgorithm, cpThreshold, and cpPermuteEntropy allow a symmetric square matrix as input next to a qgraph object
+- cpPermuteEntropy allows using parallel computing to speed up calculation
 - new error messages in cpCommunityGraph, cpPermuteEntropy, and cpThreshold
 - extension of the package vignette
 

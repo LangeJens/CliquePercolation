@@ -13,7 +13,7 @@ cpThreshold(
 )
 }
 \arguments{
-\item{W}{A qgraph object; see also \link[qgraph]{qgraph}}
+\item{W}{A qgraph object or a symmetric square matrix; see also \link[qgraph]{qgraph}}
 
 \item{method}{A string indicating the method to use 
 (\code{"unweighted"}, \code{"weighted"}, or \code{"weighted.CFinder"}).

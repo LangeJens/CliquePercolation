@@ -10,7 +10,8 @@ cpPermuteEntropy(
   n = 100,
   interval = 0.95,
   CFinder = FALSE,
-  ncores
+  ncores,
+  seed = NULL
 )
 }
 \arguments{
@@ -31,6 +32,10 @@ Number of cores to use in computing results.
 Defaults to \code{parallel::detectCores() / 2} or half of your
 computer's processing power.
 Set to \code{1} to not use parallel computing}
+
+\item{seed}{Numeric.
+Set seed for reproducible results.
+Defaults to \code{NULL}}
 }
 \value{
 A list object with the following elements:
@@ -84,9 +89,8 @@ cpThreshold.object <- cpThreshold(W = W, method = "unweighted", k.range = c(3,4)
 
 # run cpPermuteEntropy with 100 permutations and 95\% confidence interval
 \donttest{
-set.seed(4186)
 results <- cpPermuteEntropy(W = W, cpThreshold.object = cpThreshold.object,
-                            n = 100, interval = 0.95)
+                            n = 100, interval = 0.95, seed = 4186)
 
 # check results
 results$Confidence.Interval

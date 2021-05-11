@@ -16,6 +16,9 @@
 #'    Defaults to \code{parallel::detectCores() / 2} or half of your
 #'    computer's processing power.
 #'    Set to \code{1} to not use parallel computing
+#' @param seed Numeric.
+#'    Set seed for reproducible results.
+#'    Defaults to \code{NULL}
 #'    
 #' @return
 #'   A list object with the following elements:
@@ -64,9 +67,8 @@
 #' 
 #' # run cpPermuteEntropy with 100 permutations and 95% confidence interval
 #' \donttest{
-#' set.seed(4186)
 #' results <- cpPermuteEntropy(W = W, cpThreshold.object = cpThreshold.object,
-#'                             n = 100, interval = 0.95)
+#'                             n = 100, interval = 0.95, seed = 4186)
 #' 
 #' # check results
 #' results$Confidence.Interval
@@ -78,7 +80,7 @@
 #' @export cpPermuteEntropy
 
 cpPermuteEntropy <- function(W, cpThreshold.object, n = 100, interval = 0.95,
-                             CFinder = FALSE, ncores) {
+                             CFinder = FALSE, ncores, seed = NULL) {
   
   ###check whether W is a qgraph object
   ###if not check whether matrix is symmetric and convert to qgraph object
@@ -133,6 +135,11 @@ cpPermuteEntropy <- function(W, cpThreshold.object, n = 100, interval = 0.95,
   
   #parallel processing
   cl <- parallel::makeCluster(ncores)
+  
+  #set seed for reproducibility
+  if(!is.null(seed)){
+    parallel::clusterSetRNGStream(cl = cl, iseed = seed)
+  }
   
   #export variables
   parallel::clusterExport(cl = cl,

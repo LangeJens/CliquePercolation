@@ -4,7 +4,7 @@
 #' community partition from clique percolation based on randomly permuted networks
 #' of original network.
 #' 
-#' @param W A qgraph object or a symmetric square matrix; see also \link[qgraph]{qgraph}
+#' @param W A qgraph object or a symmetric matrix; see also \link[qgraph]{qgraph}
 #' @param cpThreshold.object A cpThreshold object; see also \link{cpThreshold}
 #' @param n number of permutations (default is 100)
 #' @param interval requested confidence interval (larger than zero and smaller 1;
@@ -81,17 +81,12 @@ cpPermuteEntropy <- function(W, cpThreshold.object, n = 100, interval = 0.95,
                              CFinder = FALSE, ncores) {
   
   ###check whether W is a qgraph object
-  ###if not check whether matrix is symmetric and square and convert to qgraph object
+  ###if not check whether matrix is symmetric and convert to qgraph object
   if (!isTRUE(methods::is(W, "qgraph"))) {
     
     #error if W is a matrix but not symmetric
     if (isSymmetric(W) == FALSE) {
       stop("If W is a matrix, it must be symmetric.")
-    }
-    
-    #error if W is a matrix but not square
-    if (nrow(W) != ncol(W)) {
-      stop("If W is a matrix, it must be a square matrix.")
     }
     
     #converts matrix to qgraph if input is not a qgraph object

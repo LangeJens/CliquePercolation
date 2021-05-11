@@ -7,7 +7,7 @@
 cpAlgorithm(W, k, method = c("unweighted", "weighted", "weighted.CFinder"), I)
 }
 \arguments{
-\item{W}{A qgraph object or a symmetric square matrix; see also \link[qgraph]{qgraph}}
+\item{W}{A qgraph object or a symmetric matrix; see also \link[qgraph]{qgraph}}
 
 \item{k}{Clique size (number of nodes that should form a clique)}
 

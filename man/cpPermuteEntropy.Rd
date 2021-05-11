@@ -14,7 +14,7 @@ cpPermuteEntropy(
 )
 }
 \arguments{
-\item{W}{A qgraph object or a symmetric square matrix; see also \link[qgraph]{qgraph}}
+\item{W}{A qgraph object or a symmetric matrix; see also \link[qgraph]{qgraph}}
 
 \item{cpThreshold.object}{A cpThreshold object; see also \link{cpThreshold}}
 

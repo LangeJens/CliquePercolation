@@ -1,3 +1,7 @@
+[![CRAN Version](http://www.r-pkg.org/badges/version/CliquePercolation)](https://cran.r-project.org/package=CliquePercolation)
+[![Downloads](https://cranlogs.r-pkg.org/badges/CliquePercolation)](https://cran.r-project.org/package=CliquePercolation)
+[![Travis build status](https://travis-ci.com/LangeJens/CliquePercolation.svg?branch=master)](https://travis-ci.com/LangeJens/CliquePercolation)
+
 # CliquePercolation
 
 **CliquePercolation** is an **R** package that entails multiple functions related to the clique percolation community detection algorithms for undirected, unweighted networks and for undirected, weighted networks. As various sciences analyze structural properties of networks, the **CliquePercolation** package can be useful in many fields such as physics, biology, psychology, computer science, or sociology. For an extensive description of (a) the clique percolation algorithms for undirected, unweighted as well as undirected, weighted networks and (b) the workflow of the package with multiple examples, see the package vignette, e.g., by running `vignette("CliquePercolation")` after installing (see below) and loading (`library(CliquePercolation)`) the package. Furthermore, the documentation of each function covers various other standalone examples that can be used to verify their functionality. An overview of all functions and links to their documentations are available by running `?'CliquePercolation'`.

@@ -4,7 +4,7 @@
 #' to the community partition identified via the clique percolation community
 #' detection algorithm, taking predefined sets of nodes into account.
 #' 
-#' @param W A qgraph object; see also \link[qgraph]{qgraph}
+#' @param W A qgraph object or a symmetric matrix; see also \link[qgraph]{qgraph}
 #' @param list.of.communities List object taken from results of cpAlgorithm
 #'    function; see also \link{cpAlgorithm}
 #' @param list.of.sets List object specifying predefined groups of nodes
@@ -275,6 +275,19 @@ cpColoredGraph <- function(W, list.of.communities, list.of.sets = NULL, larger.s
                            own.colors = NULL,
                            avoid.repeated.mixed.colors = FALSE,
                            ...){
+  
+  ###check whether W is a qgraph object
+  ###if not check whether matrix is symmetric and convert to qgraph object
+  if (!isTRUE(methods::is(W, "qgraph"))) {
+    
+    #error if W is a matrix but not symmetric
+    if (isSymmetric(W) == FALSE) {
+      stop("If W is a matrix, it must be symmetric.")
+    }
+    
+    #converts matrix to qgraph if input is not a qgraph object
+    W <- qgraph::qgraph(W, DoNotPlot = TRUE)
+  }
   
   #error, if list.of.sets does not entail as many nodes as the network (if list.of.sets is specified)
   if (!is.null(list.of.sets)) {

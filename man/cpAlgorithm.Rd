@@ -22,15 +22,17 @@ A list object with the following elements:
   \item{list.of.communities.numbers}{list of communities with numbers as identifiers 
         of nodes}
   \item{list.of.communities.labels}{list of communities with labels from qgraph object 
-        as identifiers of nodes}
+        or row or column names of matrix as identifiers of nodes}
   \item{shared.nodes.numbers}{vector with all nodes that belong to multiple communities 
         with numbers as identifiers of nodes}
   \item{shared.nodes.labels}{vector with all nodes that belong to multiple communities 
-        with labels from qgraph object as identifiers of nodes}
+        with labels from qgraph object or row or column names of matrix  as identifiers
+        of nodes}
   \item{isolated.nodes.numbers}{vector with all nodes that belong to no community 
         with numbers as identifiers of nodes}
   \item{isolated.nodes.labels}{vector with all nodes that belong to no community 
-        with labels from qgraph object as identifiers of nodes}
+        with labels from qgraph object or row or column names of matrix as identifiers
+        of nodes}
   \item{k}{user-specified \code{k}}
   \item{method}{user-specified method}
   \item{I}{user-specified \code{I} (if method was \code{"weighted"} 

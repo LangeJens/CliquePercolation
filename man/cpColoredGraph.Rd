@@ -19,7 +19,7 @@ cpColoredGraph(
 )
 }
 \arguments{
-\item{W}{A qgraph object; see also \link[qgraph]{qgraph}}
+\item{W}{A qgraph object or a symmetric matrix; see also \link[qgraph]{qgraph}}
 
 \item{list.of.communities}{List object taken from results of cpAlgorithm
 function; see also \link{cpAlgorithm}}

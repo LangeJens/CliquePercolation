@@ -33,6 +33,8 @@
 #'   is printed in this case.
 #'   
 #' @examples
+#' ## Example with fictitious data
+#' 
 #' # create qgraph object
 #' W <- matrix(c(0,1,1,0,0,0,0,
 #'               0,0,1,0,0,0,0,
@@ -58,6 +60,22 @@
 #'                                 node.size.method = "proportional",
 #'                                 max.node.size = 7,
 #'                                 shape = "triangle")
+#'                                 
+#' ## Example with Obama data set (see ?Obama)
+#' 
+#' # get data
+#' data(Obama)
+#' 
+#' # estimate network
+#' net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
+#' 
+#' # run clique percolation algorithm with specific k and I
+#' cpk3I.16 <- cpAlgorithm(net, k = 3, I = 0.16, method = "weighted")
+#' 
+#' # plot community network; normal
+#' Obama.network <- cpCommunityGraph(cpk3I.16$list.of.communities.numbers,
+#'                                   node.size.method = "proportional",
+#'                                   theme = "colorblind")
 #' 
 #' @author Jens Lange, \email{lange.jens@@outlook.com}
 #' 

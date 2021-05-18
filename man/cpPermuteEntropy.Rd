@@ -72,6 +72,8 @@ The function generates \code{n} random permutations of the network
   confidence interval of the respective \code{k}.
 }
 \examples{
+## Example with fictitious data
+
 # create qgraph object
 W <- matrix(c(0,1,1,1,0,0,0,0,
               0,0,1,1,0,0,0,0,
@@ -94,8 +96,32 @@ results <- cpPermuteEntropy(W = W, cpThreshold.object = cpThreshold.object,
                             n = 100, interval = 0.95, seed = 4186)
 
 # check results
-results$Confidence.Interval
-results$Extracted.Rows
+results
+}
+
+## Example with Obama data set (see ?Obama)
+
+# get data
+data(Obama)
+
+# estimate network
+net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
+
+# create cpThreshold object
+\donttest{
+threshold <- cpThreshold(net, method = "weighted",
+                         k.range = 3:4,
+                         I.range = seq(0.1, 0.5, 0.01),
+                         threshold = "entropy")
+}
+                          
+# run cpPermuteEntropy with 50 permutations and 99\% confidence interval
+\donttest{
+permute <- cpPermuteEntropy(net, cpThreshold.object = threshold,
+                            interval = 0.99, n = 50, ncores = 2, seed = 4186)
+
+# check results
+permute
 }
 
 }

@@ -67,6 +67,12 @@
 #' # run clique percolation for unweighted networks
 #' results <- cpAlgorithm(W = W, k = 3, method = "unweighted")
 #' 
+#' # print results overview
+#' results
+#' 
+#' # extract more information about communities
+#' summary(results)
+#' 
 #' ## Example for weighted networks
 #' 
 #' # create qgraph object
@@ -86,6 +92,29 @@
 #' 
 #' # run clique percolation for weighted networks
 #' results <- cpAlgorithm(W = W, k = 3, method = "weighted", I = 0.1)
+#' 
+#' # print results overview
+#' results
+#' 
+#' # extract more information about communities
+#' summary(results)
+#' 
+#' ## Example with Obama data set (see ?Obama)
+#' 
+#' # get data
+#' data(Obama)
+#' 
+#' # estimate network
+#' net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
+#' 
+#' # run clique percolation algorithm with specific k and I
+#' cpk3I.16 <- cpAlgorithm(net, k = 3, I = 0.16, method = "weighted")
+#' 
+#' # print results overview
+#' cpk3I.16
+#' 
+#' # extract more information about communities
+#' summary(cpk3I.16)
 #' 
 #' @references
 #' Farkas, I., Abel, D., Palla, G., & Vicsek, T. (2007). Weighted network modules.

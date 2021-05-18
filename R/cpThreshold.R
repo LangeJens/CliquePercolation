@@ -118,6 +118,20 @@
 #' results <- cpThreshold(W = W, method = "weighted", k.range = 3,
 #'                        I.range = c(seq(0.3, 0.09, by = -0.01)),
 #'                        threshold = c("largest.components.ratio","chi","entropy"))
+#'
+#' ## Example with Obama data set (see ?Obama)
+#' 
+#' # get data
+#' data(Obama)
+#' 
+#' # estimate network
+#' net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
+#' 
+#' # determine entropy threshold for k from 3 to 4 and I from 0.1 to 0.5
+#' threshold <- cpThreshold(net, method = "weighted",
+#'                          k.range = 3:4,
+#'                          I.range = seq(0.1, 0.5, 0.01),
+#'                          threshold = "entropy")
 #' 
 #' @references
 #' Farkas, I., Abel, D., Palla, G., & Vicsek, T. (2007). Weighted network modules.

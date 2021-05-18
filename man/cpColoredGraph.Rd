@@ -200,7 +200,9 @@ The function takes the results of cpAlgorithm (see also \link{cpAlgorithm}),
   procedure is identical.
 }
 \examples{
-#generate qgraph object with letters as labels
+## Example with fictitious data
+
+# generate qgraph object with letters as labels
 W <- matrix(c(0,0.10,0,0,0,0.10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
               0,0,0.10,0,0,0.10,0.20,0,0,0,0,0.20,0.20,0,0,0,0,0,0,0,0,
               0,0,0,0.10,0,0.10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -229,46 +231,46 @@ colnames(W) <- letters[seq(from = 1, to = ncol(W))]
 
 W <- qgraph::qgraph(W, layout = "spring", edge.labels = TRUE)
 
-#run clique percolation algorithm; three communities; two shared nodes, one isolated node
+# run clique percolation algorithm; three communities; two shared nodes, one isolated node
 cp <- cpAlgorithm(W, k = 3, method = "weighted", I = 0.09)
 
-#color original graph according to community partition
-#all other arguments are defaults; qgraph arguments used to return same layout
+# color original graph according to community partition
+# all other arguments are defaults; qgraph arguments used to return same layout
 \donttest{
 results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels,
                           layout = "spring", edge.labels = TRUE)
 }
 
-#own colors (red, green, and blue) assigned to the communities
+# own colors (red, green, and blue) assigned to the communities
 \donttest{
 results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels,
                           own.colors = c("#FF0000","#00FF00","#0000FF"),
                           layout = "spring", edge.labels = TRUE)
 }
 
-#define sets of nodes; nodes a to o are in Set 1 and letters p to u in Set 2
+# define sets of nodes; nodes a to o are in Set 1 and letters p to u in Set 2
 list.of.sets <- list(letters[seq(from = 1, to = 15)],
                      letters[seq(from = 16, to = 21)])
 
-#color original graph according to community partition, taking sets of nodes into account
-#two communities are pure and therefore get shades of set color; smaller community is more white
-#one community is mixed, so both set colors get mixed
+# color original graph according to community partition, taking sets of nodes into account
+# two communities are pure and therefore get shades of set color; smaller community is more white
+# one community is mixed, so both set colors get mixed
 \donttest{
 results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels,
                           list.of.sets = list.of.sets,
                           layout = "spring", edge.labels = TRUE)
 }
 
-#graph as before, but specifying the set palette size to 6
-#from a range of 6 colors, the pure communities get the darker ones
-#in a different network with also two pure communities, luminance would therefore be equal
+# graph as before, but specifying the set palette size to 6
+# from a range of 6 colors, the pure communities get the darker ones
+# in a different network with also two pure communities, luminance would therefore be equal
 \donttest{
 results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels,
                           list.of.sets = list.of.sets, set.palettes.size = 6,
                           layout = "spring", edge.labels = TRUE)
 }
 
-#graph as before, but colors sampled only form yellow to blue range, less chroma, more luminance
+# graph as before, but colors sampled only form yellow to blue range, less chroma, more luminance
 \donttest{
 results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels,
                           list.of.sets = list.of.sets, set.palettes.size = 6,
@@ -276,13 +278,31 @@ results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels
                           layout = "spring", edge.labels = TRUE)
 }
 
-#own colors (red and green) assigned to the sets
-#two communities in shades of red and one community is mix of green and red (brown)
+# own colors (red and green) assigned to the sets
+# two communities in shades of red and one community is mix of green and red (brown)
 \donttest{
 results <- cpColoredGraph(W, list.of.communities = cp$list.of.communities.labels,
                           list.of.sets = list.of.sets,
                           own.colors = c("#FF0000","#00FF00"),
                           layout = "spring", edge.labels = TRUE)
+}
+
+## Example with Obama data set (see ?Obama)
+
+# get data
+data(Obama)
+
+# estimate network
+net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
+
+# run clique percolation algorithm with specific k and I
+cpk3I.16 <- cpAlgorithm(net, k = 3, I = 0.16, method = "weighted")
+
+# color original graph according to community partition
+# all other arguments are defaults
+\donttest{
+results <- cpColoredGraph(net, list.of.communities = cpk3I.16$list.of.communities.labels,
+                          layout = "spring", theme = "colorblind")
 }
 
 }

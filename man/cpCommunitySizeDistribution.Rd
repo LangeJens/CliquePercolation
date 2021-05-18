@@ -44,6 +44,8 @@ The function takes the results of cpAlgorithm (see also \link{cpAlgorithm}),
   fit_power_law. For other arguments, default values are used.
 }
 \examples{
+## Example with fictitious data
+
 # create qgraph object; 150 nodes; 1/7 of all edges are different from zero
 W <- matrix(c(0), nrow = 150, ncol = 150, byrow = TRUE)
 set.seed(4186)
@@ -64,6 +66,21 @@ cp.size.dist <- cpCommunitySizeDistribution(cp.results$list.of.communities.numbe
                                             color.line = "#0000ff",
                                             test.power.law = TRUE)
 cp.size.dist$fit.power.law
+
+## Example with Obama data set (see ?Obama)
+
+# get data
+data(Obama)
+
+# estimate network
+net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
+
+# run clique percolation algorithm with specific k and I
+cpk3I.16 <- cpAlgorithm(net, k = 3, I = 0.16, method = "weighted")
+
+# plot community size distribution
+#the distribution is not very informative with four equally-sized communities
+Obama.size.dist <- cpCommunitySizeDistribution(cpk3I.16$list.of.communities.numbers)
 
 }
 \author{

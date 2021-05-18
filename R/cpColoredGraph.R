@@ -632,8 +632,9 @@ cpColoredGraph <- function(W, list.of.communities, list.of.sets = NULL, larger.s
   qgraph::qgraph(qgraph::getWmat(W), pie = node_split, pieColor = colors_nodes, pieBorder = 1, ...)
   
   #return basic colors assigned to sets (if there were sets), community colors, and node colors
-  return(list(basic.colors.sets = colors_sets,
-              colors.communities = colors_communities,
-              colors.nodes = colors_nodes))
+  #invisible prevents output from being printed in console when output is not assigned
+  invisible(list(basic.colors.sets = colors_sets,
+                 colors.communities = colors_communities,
+                 colors.nodes = colors_nodes))
   
 }

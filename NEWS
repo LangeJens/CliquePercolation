@@ -10,6 +10,7 @@ Changes in Version 0.3.0
 - new error messages in cpCommunityGraph, cpPermuteEntropy, and cpThreshold
 - extension of the package vignette
 - added two data sets, Obama and immuno
+- cpColoredGraph and cpCommunitySizeDistribution now return information beyond the plots invisibly
 
 Version 0.2.0
 - first version submitted to CRAN

@@ -45,6 +45,7 @@ A list object with the following elements:
   \item{Extracted.Rows}{rows extracted from \code{cpThreshold.object} that are
      larger than the upper bound of the specified confidence interval for
      each \code{k}}
+  \item{Settings}{user-specified settings}
 }
 }
 \description{

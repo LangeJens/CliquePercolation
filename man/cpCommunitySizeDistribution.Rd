@@ -39,7 +39,7 @@ The function takes the results of cpAlgorithm (see also \link{cpAlgorithm}),
   
   If \code{test.power.law = TRUE}, test of a fit of a power-law is performed with the
   function fit_power_law (see also \link[igraph]{fit_power_law}). Fit is tested for
-  the entire distribution from the smallest community size onwards (i.e., typically k
+  the entire distribution from the smallest community size onward (i.e., typically k
   as specified in cpAlgorithm). Moreover, test uses the \code{plfit} implementation of
   fit_power_law. For other arguments, default values are used.
 }

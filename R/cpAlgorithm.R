@@ -324,7 +324,7 @@ cpAlgorithm <- function(W, k, method = c("unweighted","weighted","weighted.CFind
     names(results_unweighted) <- c("list.of.communities.numbers","list.of.communities.labels",
                                    "shared.nodes.numbers","shared.nodes.labels",
                                    "isolated.nodes.numbers","isolated.nodes.labels")
-    return(c(results_unweighted,list(k = k, method = method)))
+    returned_object <- c(results_unweighted,list(k = k, method = method))
   }
   
   if (method == "weighted" | method == "weighted.CFinder") {
@@ -337,7 +337,11 @@ cpAlgorithm <- function(W, k, method = c("unweighted","weighted","weighted.CFind
     names(results_weighted) <- c("list.of.communities.numbers","list.of.communities.labels",
                                  "shared.nodes.numbers","shared.nodes.labels",
                                  "isolated.nodes.numbers","isolated.nodes.labels")
-    return(c(results_weighted,list(k = k, method = method, I = I)))
+    returned_object <- c(results_weighted,list(k = k, method = method, I = I))
   }
+  
+  class(returned_object) <- "cpAlgorithm"
+  
+  return(returned_object)
   
 }

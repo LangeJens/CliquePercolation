@@ -106,7 +106,7 @@ cpCommunityGraph <- function(list.of.communities, node.size.method = c("proporti
       qgraph::qgraph(W, ...)
     }
     
-    return(list(community.weights.matrix = W))
+    invisible(list(community.weights.matrix = W))
   }
   
 }

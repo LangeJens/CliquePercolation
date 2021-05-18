@@ -28,6 +28,7 @@
 #'   \item{Extracted.Rows}{rows extracted from \code{cpThreshold.object} that are
 #'      larger than the upper bound of the specified confidence interval for
 #'      each \code{k}}
+#'   \item{Settings}{user-specified settings}
 #' }
 #' 
 #' @details
@@ -246,5 +247,15 @@ cpPermuteEntropy <- function(W, cpThreshold.object, n = 100, interval = 0.95,
                       paste(interval*100, "% CI upper", sep = ""))
   extracted_rows <- Reduce(rbind, extracted_rows)
   
-  return(list(Confidence.Interval = results, Extracted.Rows = extracted_rows))
+  returned_object <- list(Confidence.Interval = results,
+                          Extracted.Rows = extracted_rows,
+                          Settings = list(n = n,
+                                          interval = interval,
+                                          CFinder = CFinder,
+                                          ncores = ncores,
+                                          seed = seed))
+  
+  class(returned_object) <- "cpPermuteEntropy"
+  
+  return(returned_object)
 }

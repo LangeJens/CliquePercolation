@@ -2,6 +2,8 @@
 ^Meta$
 ^cran-comments\.md$
 ^LICENSE
+^README_files$
 ^README\.md$
+^README\.Rmd$
 ^paper$
 ^\.travis\.yml$

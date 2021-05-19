@@ -12,7 +12,7 @@ authors:
 affiliations:
  - name: University of Hamburg
    index: 1
-date: "2021-01-06"
+date: "2021-05-19"
 bibliography: paper.bib
 ---
 
@@ -60,7 +60,7 @@ W <- qgraph::qgraph(W,
 
 The clique percolation algorithm proceeds in two steps. First, it identifies $k$-cliques in the network, i.e., fully conntected subgraphs with $k$ nodes, when the geometric mean of their edge weights exceeds the Intensity threshold $I$. Second, communities are defined as sets of adjacent $k$-cliques, i.e., $k$-cliques that share $k - 1$ nodes, allowing some nodes to be shared by communities or to be isolated.
 
-The package **CliquePercolation** faciliates executing these steps. First, it helps identifying optimal values for $k$ and $I$. For very small networks (as in \autoref{fig:fig1}), the entropy of the community partition should be maximized (treating isolated nodes as a separate community).
+The package **CliquePercolation** facilitates executing these steps. First, it helps identifying optimal values for $k$ and $I$. For very small networks (as in \autoref{fig:fig1}), the entropy of the community partition should be maximized (treating isolated nodes as a separate community).
 
 \begin{equation}
 Entropy = -\sum_{i=1}^N p_i * \log_2 p_i
@@ -95,8 +95,7 @@ and the `cpPermuteEntropy` function runs the permutation test
 
 
 ```r
-set.seed(4186)
-thresholds.permute <- cpPermuteEntropy(W, cpThreshold.object = threshold)
+thresholds.permute <- cpPermuteEntropy(W, cpThreshold.object = threshold, seed = 4186)
 ```
 
 \normalsize
@@ -111,10 +110,37 @@ returning the combinations of $k$ and $I$ that are more surprising than chance
 
 
 ```r
-thresholds.permute$Extracted.Rows
-#>    k Intensity Number.of.Communities Number.of.Isolated.Nodes Entropy.Threshold
-#> 22 3      0.09                     2                        1          1.418564
-#> 44 4      0.09                     1                        4          1.000000
+thresholds.permute
+#> 
+#> Confidence intervals for entropy values of random permutations of original network
+#> 
+#> --------------------
+#> 
+#> User-specified Settings
+#> 
+#> n = 100 
+#> interval = 0.95 
+#> CFinder = FALSE 
+#> ncores = 2 
+#> seed = 4186 
+#> 
+#> 
+#> --------------------
+#> 
+#> Confidence intervals
+#> 
+#>  k 95% CI lower 95% CI upper
+#>  3        1.166        1.299
+#>  4        0.113        0.267
+#> 
+#> 
+#> --------------------
+#> 
+#> Extracted rows from cpThreshold object
+#> 
+#>  k Intensity Number.of.Communities Number.of.Isolated.Nodes Entropy.Threshold
+#>  3      0.09                     2                        1             1.419
+#>  4      0.09                     1                        4             1.000
 ```
 
 \normalsize
@@ -130,65 +156,60 @@ The highest entropy results for $k = 3$ and $I = 0.09$, which can be used to run
 
 ```r
 cp.k3I.09 <- cpAlgorithm(W, k = 3, method = "weighted", I = 0.09)
-```
 
-\normalsize
-
-&nbsp;
-
-The algorithm identified two communities
-
-&nbsp;
-
-\small
-
-
-```r
-cp.k3I.09$list.of.communities.labels
-#> [[1]]
-#> [1] "d" "e" "f" "g"
+cp.k3I.09
 #> 
-#> [[2]]
-#> [1] "a" "b" "c" "d"
+#> Results of clique percolation community detection algorithm
+#> 
+#> --------------------
+#> 
+#> User-specified Settings
+#> 
+#> method = weighted 
+#> k = 3
+#> I = 0.09
+#> 
+#> --------------------
+#> 
+#> Results
+#> 
+#> Number of communities: 2 
+#> Number of shared nodes: 1 
+#> Number of isolated nodes: 1 
+#> 
+#> --------------------
+#> 
+#> For details, use summary() (see ?summary.cpAlgorithm).
+
+summary(cp.k3I.09)
+#> 
+#> --------------------
+#> Communities (labels as identifiers of nodes)
+#> --------------------
+#> 
+#> Community 1 : d e f g 
+#> Community 2 : a b c d 
+#> 
+#> 
+#> --------------------
+#> Shared nodes (labels as identifiers of nodes)
+#> --------------------
+#> 
+#> d 
+#> 
+#> 
+#> --------------------
+#> Isolated nodes (labels as identifiers of nodes)
+#> --------------------
+#> 
+#> h
 ```
 
 \normalsize
 
 &nbsp;
 
-with one shared node
-
-&nbsp;
-
-\small
-
-
-```r
-cp.k3I.09$shared.nodes.labels
-#> [1] "d"
-```
-
-\normalsize
-
-&nbsp;
-
-and one isolated node.
-
-&nbsp;
-
-\small
-
-
-```r
-cp.k3I.09$isolated.nodes.labels
-#> [1] "h"
-```
-
-\normalsize
-
-&nbsp;
-
-Hence, the two adjacent 3-cliques $a$--$b$--$c$ and $a$--$b$--$d$ form a community and the four adjacent 3-cliques $d$--$e$--$f$, $d$--$e$--$g$, $d$--$f$--$g$, and $e$--$f$--$g$ form another community, leading node $d$ to be shared between both communities and node $h$ to be isolated.
+The algorithm identified two communities with one shared node and one isolated node. Hence, the two adjacent 3-cliques $a$--$b$--$c$ and $a$--$b$--$d$ form a community and the four adjacent 3-cliques $d$--$e$--$f$, $d$--$e$--$g$, $d$--$f$--$g$, and $e$--$f$--$g$ form another community, leading node $d$ to be shared between both communities and node $h$ to be isolated.
 
 The function `cpColoredGraph` can visualize the results. For instance, using the default color scheme, all nodes that belong to the same community get the same color, shared nodes are split in multiple parts with colors for each community they belong to, and isolated nodes are white (see \autoref{fig:fig2}).
 
@@ -216,6 +237,6 @@ Beyond this minimal example, the **CliquePercolation** package provides more fun
 
 # Acknowledgements
 
-The development of **CliquePercolation** greatly benefitted from discussions with Janis Zickfeld and Tessa Blanken. Moreover, Gergely Palla provided important insights into the clique percolation algorithm as implemented in **CFinder** and recommended the entropy-based method. The development of **CliquePercolation** was also supported by two grants from the German Research Foundation (Deutsche Forschungsgemeinschaft; LA 4029/1-1; LA 4029/2-1).
+The development of **CliquePercolation** greatly benefited from discussions with Janis Zickfeld and Tessa Blanken. Moreover, Gergely Palla provided important insights into the clique percolation algorithm as implemented in **CFinder** and recommended the entropy-based method. The development of **CliquePercolation** was also supported by two grants from the German Research Foundation (Deutsche Forschungsgemeinschaft; LA 4029/1-1; LA 4029/2-1).
 
 # References

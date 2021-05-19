@@ -216,7 +216,7 @@ In sum, the clique percolation algorithm proceeds by identifying $k$-cliques and
 
 The **CliquePercolation** package entails functions to conduct the clique percolation community detection algorithms for unweighted and weighted networks and to interpret the results. In what follows, an example is used to explain the workflow suggested by the package.
 
-**CliquePercolation** accepts only networks that were analyzed with the **qgraph** package [@Epskamp+et+al:2012]. **qgraph** accepts output from various different packages such as **igraph** [@Csardi+Nepusz:2006], **bootnet** [@Epskamp+Fried:2018], or **lavaan** [@Rosseel:2012]. For details see the documentation of **qgraph**. Moreover, I will use the **Matrix** [@Bates+Maechler:2019] package for the example below. Thus, we need to load the following packages in **R** to run the example
+**CliquePercolation** accepts networks that were analyzed with the **qgraph** package [@Epskamp+et+al:2012]. **qgraph** accepts output from various different packages such as **igraph** [@Csardi+Nepusz:2006], **bootnet** [@Epskamp+Fried:2018], or **lavaan** [@Rosseel:2012]. For details see the documentation of **qgraph**. Moreover, I will use the **Matrix** [@Bates+Maechler:2019] package for the example below. Thus, we need to load the following packages in **R** to run the example
 
 ```{r setup}
 library(CliquePercolation) #version 0.3.0
@@ -224,7 +224,7 @@ library(qgraph)            #version 1.6.5
 library(Matrix)            #version 1.2-18
 ```
 
-First, I will create an example network. When you want to apply the clique percolation algorithm, you will already have a network. Importantly, it needs to be a **qgraph** object. The network I am using is weighted, with edge weights drawn from a random distribution with mean of 0.3 and a standard deviation of 0.1.
+First, I will create an example network. When you want to apply the clique percolation algorithm, you will already have a network. The network can be a **qgraph** object. Alternatively, you can also provide a symmetric matrix with rows and columns representing the nodes and each entry representing the edge connecting the respective nodes (i.e., an adjacency matrix or a weights matrix). The network I am using is weighted, with edge weights drawn from a random distribution with mean of 0.3 and a standard deviation of 0.1.
 
 ```{r, echo = TRUE, dpi = 400, fig.cap = "**Weighted network with 150 nodes.**", fig.align = "center", out.extra = 'style = "border:none"', out.width = "100%"}
 # create qgraph object; 150 nodes with letters as names; 1/7 of edges different from zero
@@ -246,7 +246,7 @@ W <- qgraph::qgraph(W, theme = "colorblind", layout = "spring", cut = 0.4)
 
 &nbsp;
 
-To run the clique percolation algorithm for weighted networks, we initially need to optimize $k$ and $I$. To this end, the `cpThreshold` function can be used. For a specific network (i.e., a **qgraph** object), it determines the ratio of the largest to second largest community, $\chi$, and/or entropy over a range of $k$ and $I$ values. It does so by running the clique percolation algorithm for either unweighted (`method = "unweighted"`) or weighted networks (`method = "weighted"`). The algorithm as implemented in **CFinder** can also be requested (`method = "weighted.CFinder"`). For each $k$ and $I$ combination, `cpThreshold` determines the respective threshold and saves the results in a data frame, specifying the respective $k$, $I$, the number of communities, the number of isolated nodes, and the requested thresholds. Note that the ratio threshold can be determined only when there
+To run the clique percolation algorithm for weighted networks, we initially need to optimize $k$ and $I$. To this end, the `cpThreshold` function can be used. For a specific network (i.e., a **qgraph** object or a matrix), it determines the ratio of the largest to second largest community, $\chi$, and/or entropy over a range of $k$ and $I$ values. It does so by running the clique percolation algorithm for either unweighted (`method = "unweighted"`) or weighted networks (`method = "weighted"`). The algorithm as implemented in **CFinder** can also be requested (`method = "weighted.CFinder"`). For each $k$ and $I$ combination, `cpThreshold` determines the respective threshold and saves the results in a data frame, specifying the respective $k$, $I$, the number of communities, the number of isolated nodes, and the requested thresholds. Note that the ratio threshold can be determined only when there
 are at least two communities and $\chi$ can be determined only when there are at least three communities. Otherwise, the function will return `NA` values in these cases. Entropy can always be determined. In the current case, as the
 network is rather large, I will request only the ratio and $\chi$ thresholds. I will do so for $k$ values of 3 and 4 and $I$ values of 0.40 to 0.01 in steps of 0.005. Even smaller steps might in many cases be preferred, given that even small changes of 0.005 can lead to rather different (and potentially optimal) values. However, to save computation time, I took these larger steps. The range of $I$ values was chosen based on the fact that my mean edge weight was set to 0.3 when generating the network. Thus, $I = 0.40$ should allow me to find a broad community size distribution. However, to be sure, one could start by setting the highest tested value of $I$ to the maximum edge weight in the network. This is recommended by Farkas et al. [-@Farkas+et+al:2007]. But then, very high $I$ values will rarely lead to the identification of any $k$-clique. The `k.range` and `I.range` are entered as vectors of numbers. The requested thresholds are also entered as a vector of strings. Depending on the network, this function may need lots of time to run (the code below ran for 18 minutes on my laptop). To see how long it takes, a progress bar is implemented.
 
@@ -264,14 +264,32 @@ We can now access the data frame that is saved in the object `thresholds`
 thresholds
 ```
 
-To decide in favor of optimal $I$ values for each $k$, we now check at which $I$ the ratio threshold is jumping abruptly to a high level, thereby crossing the ratio 2. The $I$ just before the jump should ideally also be the point of the highest $\chi$. For $k = 3$, the ratio first crossed 2 at $I = 0.35$ with $\chi$ being rather large. This solution has 45 communities and nine isolated nodes. For $k = 4$, the ratio first crossed 2 at $I = 0.27$. The $\chi$ is not very large and subsequently the nodes never reach a stage at which they are all part of a single community, most likely because $k$ is too large to allow that to happen. This already indicates that $k = 4$ is probably too high. This solution has 62 communities and 29 isolated nodes. Hence, also the number of isolated nodes is rather high. Still, we can now use these optimized values to run the clique percolation method. For this, we apply the `cpAlgorithm` function. Specifically, the `cpAlgorithm` function takes a network (i.e., a **qgraph** object) and runs the clique percolation algorithm for unweighted (`method = "unweighted"`) or weighted networks (`method = "weighted"`). The algorithm as implemented in **CFinder** can also be requested (`method = "weighted.CFinder"`). Additionally, we enter the optimal $k$ and $I$ values determined via `cpThreshold`. Thus, we run `cpAlgorithm` twice, namely
+To decide in favor of optimal $I$ values for each $k$, we now check at which $I$ the ratio threshold is jumping abruptly to a high level, thereby crossing the ratio 2. The $I$ just before the jump should ideally also be the point of the highest $\chi$. For $k = 3$, the ratio first crossed 2 at $I = 0.35$ with $\chi$ being rather large. This solution has 45 communities and nine isolated nodes. For $k = 4$, the ratio first crossed 2 at $I = 0.27$. The $\chi$ is not very large and subsequently the nodes never reach a stage at which they are all part of a single community, most likely because $k$ is too large to allow that to happen. This already indicates that $k = 4$ is probably too high. This solution has 62 communities and 29 isolated nodes. Hence, also the number of isolated nodes is rather high. Still, we can now use these optimized values to run the clique percolation method. For this, we apply the `cpAlgorithm` function. Specifically, the `cpAlgorithm` function takes a network (i.e., a **qgraph** object or a matrix) and runs the clique percolation algorithm for unweighted (`method = "unweighted"`) or weighted networks (`method = "weighted"`). The algorithm as implemented in **CFinder** can also be requested (`method = "weighted.CFinder"`). Additionally, we enter the optimal $k$ and $I$ values determined via `cpThreshold`. Thus, we run `cpAlgorithm` twice, namely
 
 ```{r, echo = TRUE}
 cpk3I.35 <- cpAlgorithm(W, k = 3, method = "weighted", I = 0.35)
 cpk4I.27 <- cpAlgorithm(W, k = 4, method = "weighted", I = 0.27)
 ```
 
-Each of these objects is a list, entailing the results of the clique percolation algorithm. Each element can be requested via the `$` operator. For instance, the list of communities with the node numbers as identifiers of the nodes for the $k = 3$ solution can be requested by typing
+These objects have the class `cpAlgorithm`. They are lists, entailing the results of the clique percolation algorithm. When printing the objects in the console, they offer a brief summary of the results. For instance
+
+```{r, echo = TRUE}
+cpk3I.35
+```
+
+Using `summary`, it is possible to get more detailed information about the communities, shared nodes, and isolated nodes.
+
+```{r, echo = TRUE, results = FALSE}
+summary(cpk3I.35)
+```
+
+By default, this function will present the communities, shared nodes, and isolated nodes with labels as identifies of the nodes. It is also possible to use the numbers as identifiers of the nodes or to restrict the output. For instance, when only the shared nodes with numbers as identifies of nodes should be requested
+
+```{r, echo = TRUE, results = FALSE}
+summary(cpk3I.35, details = "shared.nodes.numbers")
+```
+
+Alternatively, it is possible to access all information directly from the objects. Each element can be requested via the `$` operator. For instance, the list of communities with the node numbers as identifiers of the nodes for the $k = 3$ solution can be requested by typing
 
 ```{r, echo = TRUE, results = FALSE}
 cpk3I.35$list.of.communities.numbers
@@ -286,7 +304,7 @@ cpk3I.35$list.of.communities.labels
 The nodes 9, 12, and 33 in community 45 are named "ai", "al", and "bg".
 
 To decide in favor of one solution, we can investigate the community size distribution. This should be maximally broad, similar to a power-law. To look at the community size distribution, we can use another function, namely
-`cpCommunitySizeDistribution`. It takes the list of communities generated by `cpAlgorithm` and turns it into a distribution plot. As the plot may not please you visually, the function also returns a data frame with the frequency data. Thus, you are free to plot these data in any way you want. The default line color of the distribution is red, but could be changed via the `color.line` argument.
+`cpCommunitySizeDistribution`. It takes the list of communities generated by `cpAlgorithm` and turns it into a distribution plot. As the plot may not please you visually, the function also returns a data frame with the frequency data if you assign the results to an object. Thus, you are free to plot these data in any way you want. The default line color of the distribution is red, but could be changed via the `color.line` argument.
 
 ```{r, echo = TRUE, results = FALSE, dpi = 300, fig.cap = "**Community size distribution with k = 3 and I = 0.35.**", fig.align = "center", out.extra = 'style = "border:none"', out.width = "60%"}
 cpCommunitySizeDistribution(cpk3I.35$list.of.communities.numbers)
@@ -323,10 +341,8 @@ fit_pl_k3I.35$fit.power.law
 
 The Kolmogorov-Smirnov Test is not significant, $p = .20$, indicating that the hypothesis of a power-law cannot be rejected. This finding is in line with the notion that the distribution follows a power-law with $\alpha = 2.73$. Thus, we decide in favor of $k = 3$ and $I = .35$ as the optimal parameters for clique percolation.
 
-The results object not only includes lists with the communities, but also vectors for shared nodes and isolated nodes, again both with numbers as identifies of nodes (`shared.nodes.numbers`, `isolated.nodes.numbers`) or the labels (`shared.nodes.labels`, `isolated.nodes.labels`). In the example, 94 nodes are shared among communities and 9 are isolated.
-
 Oftentimes, researchers are interested in plotting the solution of the clique percolation algorithm in another network, such that a node represents a community, and the edges between nodes represent the number of nodes that
-two communities share (i.e., the *community graph*). Plotting this network can be done with the `cpCommunityGraph` function. It also takes the list of communities from `cpAlgorithm` and turns it into the community network. To showcase which node represents which network, the node sizes can be plotted proportional to the largest node (`node.size.method = "proportional"`). To do this, we set the size of the largest node via `max.node.size` and the others are scaled accordingly. If the proportional visualization is not preferred, we can also plot all nodes with equal size (`node.size.method = "normal"`). As the community network is plotted via **qgraph**, one can also add all other arguments available in **qgraph** to make the graph more pleasing. Moreover, next to plotting the community network, the function also returns the weights matrix of the community graph. This matrix could then be used for other purposes.
+two communities share (i.e., the *community graph*). Plotting this network can be done with the `cpCommunityGraph` function. It also takes the list of communities from `cpAlgorithm` and turns it into the community network. To showcase which node represents which network, the node sizes can be plotted proportional to the largest node (`node.size.method = "proportional"`). To do this, we set the size of the largest node via `max.node.size` and the others are scaled accordingly. If the proportional visualization is not preferred, we can also plot all nodes with equal size (`node.size.method = "normal"`). As the community network is plotted via **qgraph**, one can also add all other arguments available in **qgraph** to make the graph more pleasing. Moreover, next to plotting the community network, the function also returns the weights matrix of the community graph if the results are assigned to an object. This matrix could then be used for other purposes.
 
 The current community network can be plotted as follows, by additionally using a spatial arrangement and edge coloring from **qgraph**.
 
@@ -390,23 +406,24 @@ thresholds.small
 
 I display it here because, as compared to the previous example, it is short. For $k = 3$, there are three communities and one isolated node with an entropy of 1.86. For $k = 4$, there is one community and six isolated nodes with an entropy of 0.97.
 
-Now, we can estimate whether this entropy is higher than would already be expected by chance. The permutation test for very small networks is implemented in the function `cpPermuteEntropy`. For a specific network (i.e., a **qgraph** object) and a `cpThreshold` object, `cpPermuteEntropy` creates `n` permutations of the network, performs `cpThreshold` for each, extracts the highest entropy for each $k$, and determines the confidence interval of the entropy for each $k$. `n = 100` and the 95% confidence interval are the default settings. Larger `n` are certainly desired but can lead to large computation time. A progress bar again indicates how long it will take. Given that permutations are random, I will set a seed to allow reproducing the results. The function can be used as follows
+Now, we can estimate whether this entropy is higher than would already be expected by chance. The permutation test for very small networks is implemented in the function `cpPermuteEntropy`. For a specific network (i.e., a **qgraph** object or a matrix) and a `cpThreshold` object, `cpPermuteEntropy` creates `n` permutations of the network, performs `cpThreshold` for each, extracts the highest entropy for each $k$, and determines the confidence interval of the entropy for each $k$. `n = 100` and the 95% confidence interval are the default settings. Larger `n` are certainly desired but can lead to large computation time. A progress bar again indicates how long it will take. Given that permutations are random, I will set a seed to allow reproducing the results. As the function relies on parallel computation, it is not possible to set the seed outside the function. Instead, it is necessary to set the `seed` argument inside the function. By default, the function uses half of the computational power of the computer, but it is possible to set the number of used cores with the `ncores` argument. The function can be used as follows
 
 ```{r, echo = TRUE, results = FALSE}
-set.seed(4186)
 permute <- cpPermuteEntropy(W, cpThreshold.object = thresholds.small,
-                            n = 100, interval = 0.95)
+                            n = 100, interval = 0.95,
+                            ncores = 2, seed = 4186)
 ```
 
-It produces a list with two objects. First, the confidence intervals for each $k$ can be accessed by
+The resulting object has the class `cpPermuteEntropy`. The printing function shows the results, following a repetition of the specified settings. First, it shows the confidence intervals for each $k$. Second, the function also takes the original `cpThreshold` object specified in `cpThreshold.object` and removes all rows that do not exceed the upper bound of the confidence interval.
 
 ```{r, echo = TRUE}
+permute
+```
+
+The resulting object is also a list with the two respective objects, assessible via
+
+```{r, echo = TRUE, results = FALSE}
 permute$Confidence.Interval
-```
-
-Furthermore, the function also takes the original `cpThreshold` object specified in `cpThreshold.object` and removes all rows that do not exceed the upper bound of the confidence interval. This altered data frame is available by
-
-```{r, echo = TRUE}
 permute$Extracted.Rows
 ```
 
@@ -423,24 +440,11 @@ cpk3 <- cpAlgorithm(W, k = 3, method = "unweighted")
 By inspecting the results with
 
 ```{r, echo = TRUE}
-cpk3$list.of.communities.labels
+cpk3
+summary(cpk3)
 ```
 
-we see that we indeed have three communities, one entailing nodes $a$, $b$, $c$, and $d$, one entailing nodes $d$, $e$, and $f$, and one entailing nodes $f$, $g$, $h$, and $i$.
-
-By using
-
-```{r, echo = TRUE}
-cpk3$shared.nodes.labels
-```
-
-we see that nodes $d$ and $f$ are shared nodes and by using
-
-```{r, echo = TRUE}
-cpk3$isolated.nodes.labels
-```
-
-we see that node $j$ is isolated.
+we see that we indeed have three communities, one entailing nodes $a$, $b$, $c$, and $d$, one entailing nodes $d$, $e$, and $f$, and one entailing nodes $f$, $g$, $h$, and $i$. We further see that nodes $d$ and $f$ are shared nodes and that node $j$ is isolated.
 
 Finally, we would like to plot the results of the clique percolation algorithm. However, using the community graph for a network with only three communities would not be very informative. In the current case, the community network would have three nodes with two edges. For very small networks, an alternative may be reasonable, namely plotting the community partition directly on the original network that was analyzed. This can be achieved with the `cpColoredGraph` function. It takes the community partition from `cpAlgorithm` and assigns qualitatively different colors to the communities with the help of the **colorspace** package [@Zeileis+et+al:subm]. It is based on the HCL color space, generating palettes of colors that are rather balanced and visually pleasing. Isolated nodes will be displayed white. Shared nodes will be divided in multiple colors, one for each community they belong to.
 Original **qgraph** arguments can be used to make the network appear as before.
@@ -452,7 +456,7 @@ colored.net1 <- cpColoredGraph(W, list.of.communities = cpk3$list.of.communities
 
 &nbsp;
 
-The function also returns the colors assigned to the communities and the colors assigned to the nodes. The colors assigned to the nodes are a list with vectors for each node. If a node is shared, all its colors are in the vector. These results can be accessed by
+The function also returns the colors assigned to the communities and the colors assigned to the nodes, if the results are assigned to an object. The colors assigned to the nodes are a list with vectors for each node. If a node is shared, all its colors are in the vector. These results can be accessed by
 
 ```{r, echo = TRUE, results = FALSE}
 colored.net1$colors.communities

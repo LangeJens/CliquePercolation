@@ -71,7 +71,7 @@
 #' # run cpPermuteEntropy with 100 permutations and 95% confidence interval
 #' \donttest{
 #' results <- cpPermuteEntropy(W = W, cpThreshold.object = cpThreshold.object,
-#'                             n = 100, interval = 0.95, seed = 4186)
+#'                             n = 100, interval = 0.95, ncores = 1, seed = 4186)
 #' 
 #' # check results
 #' results
@@ -96,7 +96,7 @@
 #' # run cpPermuteEntropy with 50 permutations and 99% confidence interval
 #' \donttest{
 #' permute <- cpPermuteEntropy(net, cpThreshold.object = threshold,
-#'                             interval = 0.99, n = 50, ncores = 2, seed = 4186)
+#'                             interval = 0.99, n = 50, ncores = 1, seed = 4186)
 #' 
 #' # check results
 #' permute

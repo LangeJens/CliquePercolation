@@ -32,7 +32,7 @@
 #' Network analysis on attitudes: A brief tutorial. \emph{Social Psychological
 #' and Personality Science, 8}, 528-537. https://doi.org/10.1177/1948550617709827
 #' 
-#' @source \url{www.electionstudies.org}
+#' @source \url{https://electionstudies.org/}
 #' 
 #' @examples 
 #' data(Obama)

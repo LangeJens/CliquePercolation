@@ -21,7 +21,7 @@ An object of class \code{"data.frame"} with 5,914 observations
    }
 }
 \source{
-\url{www.electionstudies.org}
+\url{https://electionstudies.org/}
 }
 \usage{
 data(Obama)

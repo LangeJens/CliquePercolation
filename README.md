@@ -4,6 +4,7 @@ Version](http://www.r-pkg.org/badges/version/CliquePercolation)](https://cran.r-
 [![Downloads](https://cranlogs.r-pkg.org/badges/CliquePercolation)](https://cran.r-project.org/package=CliquePercolation)
 [![Travis build
 status](https://travis-ci.com/LangeJens/CliquePercolation.svg?branch=master)](https://travis-ci.com/LangeJens/CliquePercolation)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03210/status.svg)](https://doi.org/10.21105/joss.03210)
 
 # CliquePercolation
 

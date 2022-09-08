@@ -155,23 +155,35 @@
 cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFinder"), 
                          k.range, I.range, threshold = c("largest.components.ratio", "chi", 
                                                          "entropy", "fuzzymod","signedfuzzymod")) {
+  
+  ###check whether W is a qgraph object
+  ###if not check whether matrix is symmetric and convert to qgraph object
+  
   origgraph <- W
   if (!isTRUE(methods::is(W, "qgraph"))) {
     if (isSymmetric(W) == FALSE) {
       stop("If W is a matrix, it must be symmetric.")
     }
+    
+    #converts matrix to qgraph if input is not a qgraph object
     W <- qgraph::qgraph(W, DoNotPlot = TRUE)
+  
   }
+  
+  ###error message if method is not "unweighted", "weighted", or "weighted.CFinder"
   if (method != "unweighted" & method != "weighted" & method != 
       "weighted.CFinder") {
     stop("method must be 'unweighted', 'weighted', or 'weighted.CFinder' (depending on the network).")
   }
   
+  ###error messages if threshold is not "largest.components.ratio", "chi", and/or "entropy"
   check_threshold <- all(threshold %in% c("largest.components.ratio", 
                                           "chi", "entropy", "fuzzymod","signedfuzzymod"))
   if (check_threshold == FALSE) {
     stop("threshold must be 'largest.components.ratio', 'chi', 'entropy', 'fuzzymod' and/or 'signedfuzzymod'.")
   }
+  
+  #function for chi formula
   formula_chi <- function(size_comm) {
     size_comm_sort <- sort(size_comm)
     size_comm_sort_not_max <- size_comm_sort[-length(size_comm_sort)]
@@ -183,6 +195,8 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
     result_formula_chi <- sum(value_chi)
     return(result_formula_chi)
   }
+  
+  #function for entropy formula
   formula_entropy <- function(size_all) {
     value_ent <- c()
     for (w in 1:length(size_all)) {
@@ -192,6 +206,8 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
     return(result_formula_ent)
   }
   
+  #if input is weighted network...
+  #all threshold strategies can be implemented and they depend on k.range and I.range
   if (method == "weighted" | method == "weighted.CFinder") {
     ratio <- c()
     chi <- c()
@@ -205,11 +221,15 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
     count <- 1
     progress_bar <- utils::txtProgressBar(min = 0, max = length(k.range) * 
                                             length(I.range), style = 3)
+    
+    #progress bar update
     progress_bar_counter <- 0
     for (k in k.range) {
       for (i in I.range) {
-        results <<- cpAlgorithm(W, k = k, method = method, 
+        results <- cpAlgorithm(W, k = k, method = method, 
                                 I = as.numeric(as.character(i)))
+        #if there are at least two communities...
+        #ratio threshold can be determined if requested
         if (length(results$list.of.communities.numbers) > 
             1 & "largest.components.ratio" %in% threshold) {
           size_dist_lcr <- c()
@@ -220,10 +240,14 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
           ratio[count] <- sort(size_dist_lcr)[distinct_sizes_lcr]/sort(size_dist_lcr)[distinct_sizes_lcr - 
                                                                                         1]
         }
+        #if there are fewer than two communities...
+        #ratio threshold cannot be determined even if requested
         if (length(results$list.of.communities.numbers) < 
             2 & "largest.components.ratio" %in% threshold) {
           ratio[count] <- NA
         }
+        #if there are at least three communities...
+        #chi threshold can be determined if requested
         if (length(results$list.of.communities.numbers) > 
             2 & "chi" %in% threshold) {
           size_dist_chi <- c()
@@ -232,11 +256,19 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
           }
           chi[count] <- formula_chi(size_dist_chi)
         }
+        #if there are fewer than three communities...
+        #chi threshold cannot be determined even if requested
         if (length(results$list.of.communities.numbers) < 
             3 & "chi" %in% threshold) {
           chi[count] <- NA
         }
         
+        #entropy can always be calculated
+        #when all nodes are isolated, entropy is simply zero, because all nodes are isolated and the formula is 1 * log2(1) = 0
+        #entropy formula needs vector with sizes of each community and number of isolated nodes
+        #when there are shared nodes, probabilities in formula would add up to value > 1
+        #to circumvent that, shared nodes are divided between their communities (e.g., two communities share node then each community gets only 0.5 instead of 1)
+        #code below creates vector with all necessary sizes and subtracts respective values from communities with shared nodes
         if ("entropy" %in% threshold) {
           if (length(results$list.of.communities.numbers) > 
               0) {
@@ -298,6 +330,8 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
     }
   }
   
+  #if input is unweighted network...
+  #all threshold strategies can be implemented and they depend only on k.range
   if (method == "unweighted") {
     ratio <- c()
     chi <- c()
@@ -313,6 +347,8 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
     progress_bar_counter <- 0
     for (k in k.range) {
       results <- cpAlgorithm(W, k = k, method = method)
+      #if there are at least two communities...
+      #ratio threshold can be determined if requested
       if (length(results$list.of.communities.numbers) > 
           1 & "largest.components.ratio" %in% threshold) {
         size_dist_lcr <- c()
@@ -323,10 +359,16 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
         ratio[count] <- sort(size_dist_lcr)[distinct_sizes_lcr]/sort(size_dist_lcr)[distinct_sizes_lcr - 
                                                                                       1]
       }
+      
+      #if there are fewer than two communities...
+      #ratio threshold cannot be determined even if requested
       if (length(results$list.of.communities.numbers) < 
           2 & "largest.components.ratio" %in% threshold) {
         ratio[count] <- NA
       }
+      
+      #if there are at least three communities...
+      #chi threshold can be determined if requested
       if (length(results$list.of.communities.numbers) > 
           2 & "chi" %in% threshold) {
         size_dist_chi <- c()
@@ -335,10 +377,20 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
         }
         chi[count] <- formula_chi(size_dist_chi)
       }
+      
+      #if there are fewer than three communities...
+      #chi threshold cannot be determined even if requested
       if (length(results$list.of.communities.numbers) < 
           3 & "chi" %in% threshold) {
         chi[count] <- NA
       }
+      
+      #entropy can always be calculated
+      #when all nodes are isolated, entropy is simply zero, because all nodes are isolated and the formula is 1 * log2(1) = 0
+      #entropy formula needs vector with sizes of each community and number of isolated nodes
+      #when there are shared nodes, probabilities in formula would add up to value > 1
+      #to circumvent that, shared nodes are divided between their communities (e.g., two communities share node then each community gets only 0.5 instead of 1)
+      #code below creates vector with all necessary sizes and subtracts respective values from communities with shared nodes
       if ("entropy" %in% threshold) {
         if (length(results$list.of.communities.numbers) > 
             0) {
@@ -390,10 +442,14 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
       community[count] <- length(results$list.of.communities.numbers)
       isolated[count] <- length(results$isolated.nodes.numbers)
       count <- count + 1
+      
+      #progress bar update
       progress_bar_counter <- progress_bar_counter + 1
       utils::setTxtProgressBar(progress_bar, progress_bar_counter)
     }
   }
+  
+  #close progress bar
   close(progress_bar)
   if (method == "weighted" | method == "weighted.CFinder") {
     data <- data.frame(cbind(k_cp, I_cp, community, isolated))
@@ -404,6 +460,8 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
     data <- data.frame(cbind(k_cp, community, isolated))
     names(data) <- c("k", "Number.of.Communities", "Number.of.Isolated.Nodes")
   }
+  
+  #second, add required threshold
   if ("largest.components.ratio" %in% threshold) {
     data <- cbind(data, Ratio.Threshold = ratio)
   }

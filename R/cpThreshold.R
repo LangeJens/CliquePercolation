@@ -208,7 +208,7 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
     progress_bar_counter <- 0
     for (k in k.range) {
       for (i in I.range) {
-        results <<- cpAlgorithm(W, k = k, method = method, 
+        results <- cpAlgorithm(W, k = k, method = method, 
                                 I = as.numeric(as.character(i)))
         if (length(results$list.of.communities.numbers) > 
             1 & "largest.components.ratio" %in% threshold) {

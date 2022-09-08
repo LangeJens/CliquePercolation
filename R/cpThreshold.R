@@ -161,6 +161,8 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
   
   origgraph <- W
   if (!isTRUE(methods::is(W, "qgraph"))) {
+    
+    #error if W is a matrix but not symmetric
     if (isSymmetric(W) == FALSE) {
       stop("If W is a matrix, it must be symmetric.")
     }
@@ -220,10 +222,10 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
     isolated <- c()
     count <- 1
     progress_bar <- utils::txtProgressBar(min = 0, max = length(k.range) * 
-                                            length(I.range), style = 3)
+                                            length(I.range), style = 3) #progress bar definition
     
     #progress bar update
-    progress_bar_counter <- 0
+    progress_bar_counter <- 0 #counter for progress bar
     for (k in k.range) {
       for (i in I.range) {
         results <- cpAlgorithm(W, k = k, method = method, 
@@ -451,6 +453,11 @@ cpThreshold <- function (W, method = c("unweighted", "weighted", "weighted.CFind
   
   #close progress bar
   close(progress_bar)
+  
+  #return data frame with respective values and add thresholds depending on request
+  
+  #first, create data set with information about simulation parameters depending on method
+  
   if (method == "weighted" | method == "weighted.CFinder") {
     data <- data.frame(cbind(k_cp, I_cp, community, isolated))
     names(data) <- c("k", "Intensity", "Number.of.Communities", 

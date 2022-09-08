@@ -6,10 +6,7 @@
 \alias{CliquePercolation-package}
 \title{CliquePercolation: Clique Percolation for Networks}
 \description{
-Clique percolation community detection for weighted and 
-    unweighted networks as well as threshold and plotting functions.
-    For more information see Farkas et al. (2007) <doi:10.1088/1367-2630/9/6/180>
-    and Palla et al. (2005) <doi:10.1038/nature03607>.
+Clique percolation community detection for weighted and unweighted networks as well as threshold and plotting functions. For more information see Farkas et al. (2007) \doi{10.1088/1367-2630/9/6/180} and Palla et al. (2005) \doi{10.1038/nature03607}.
 }
 \details{
 CliquePercolation includes a number of functions for detecting and interpreting

@@ -35,7 +35,7 @@
 #' @details The modularity of a graph with respect to some division is a measure of how good 
 #' the division is. The traditional \emph{modularity} Q was proposed by Newman and Girvan (2004):
 #' 
-#' \deqn{Q=1/(2m) \sum_{c\epsilonC} \sum_{u,v\epsilonV} \delta_{cu} \delta_{cv} (A_{uv}-\frac{k_{u}k_{v}}{2m}}
+#' \deqn{Q=\frac{1}{2m} \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} (A_{uv}-\frac{k_{u}k_{v}}{2m}) \delta_{cu} \delta_{cv}}
 #' 
 #' where m is the total number of edges, C is the set of communities corresponding to a partition,
 #' V is the set of vertices (i.e. nodes) in the network, \eqn{A_{uv}} is the element of the 
@@ -78,7 +78,7 @@ FuzzyMod <- function(graph, membership, abs=TRUE) {
   #Transform into network if edge list from igraph
   if(class(graph)[[1]]=='igraph') {
     if(length(E(g)$weight)>0) {
-     graph <- as.matrix(as_adjacency_matrix(graph, attr="weight"))
+      graph <- as.matrix(as_adjacency_matrix(graph, attr="weight"))
     } else {
       graph <- as.matrix(as_adjacency_matrix(graph))
     }
@@ -100,137 +100,69 @@ FuzzyMod <- function(graph, membership, abs=TRUE) {
     rownames(graph) <- sub("^0+", "", rownames(graph))
   }
   
-  #Transform membership information to list (input from CliquePercolation or EGANet)
-  if (class(membership)[1]=='list'){
-    membership <-  membership
-  }
+  #Abbreviate the column and row names to match CP algorithm
+  abnam <- abbreviate(colnames(graph), 3)
+  colnames(graph) <- abnam
+  rownames(graph) <- abnam
   
-  if (class(membership)[1]=='numeric' | class(membership)[1]=='integer'){
-    memberlist <- list()
-    if (length(names(membership))==0) {
-      names(membership) <- colnames(graph)
-      
-    }
-    for(i in unique(membership)){
-      memberlist[[i]] <- names(membership[membership==i])
-    }
-    membership <- memberlist
-  }
-  
-  #Get the shared nodes
-  shared <- unique(unlist(membership)[duplicated(unlist(membership))])
-  
-  #Get the isolated nodes
-  isolatednodes <- setdiff(colnames(graph), unlist(membership))
-  
-  #Creates an object with the assignment of each node to one community
-  if (length(membership)>0){ 
-    #In case there are communities
-    membership.new <- membership
-    for(i in 1:length(membership.new))
-      membership.new[[i]] <- rep(i, length(membership.new[[i]]))
-    wc <- unlist(membership.new)
-    wc <- t(as.data.frame(wc))
-    colnames(wc) <- unlist(membership)
-    comlab <- wc 
-  } else { #In case all nodes are isolated (singleton communities)
-    comlab <- as.data.frame(t(seq(from=1, to=nrow(graph), by=1)))
-    colnames(comlab) <- colnames(graph)
-    comlab <- as.matrix(comlab)
-  } 
-  
-  #Creates an object with the assignment of each node to one community (transposed)
-  indfac <- data.frame(matrix(vector(),length(unique(as.numeric(comlab))), ncol(graph)))
-  colnames(indfac) <- colnames(graph)
-  indfac[is.na(indfac)] <- 0
-  for (z in 1:length(unique(as.numeric(comlab)))) {
-    indfac[z,match(names(comlab[,comlab==z]),colnames(indfac[z,]))] <- 1
-  }
-  
-  indfac <- t(indfac)
-  indfac <- as.data.frame(indfac)
-  rownames(indfac) <- colnames(graph)
-  facnam <- vector()
-  for(i in 1:length(unique(as.numeric(comlab)))) {
-    facnam[i] <- paste("F",i,sep="")                   
-  }
-  colnames(indfac) <- facnam
-  
-  #Calculates sum of item weights
-  itw <- vector()
-  for (z in 1:ncol(graph)) {
-    itw[z] <- sum(graph[,z])
-  }
-  itw <- t(as.data.frame(itw))
-  colnames(itw) <- colnames(graph)
-  itw <- as.data.frame(itw) #Vector with sum of items weights
-  
-  #Calculate total sum of weights
-  totnet <- sum(graph)/2
-  
-  #Calculates the belonging coefficient
-  if (length(shared)>0) {
-    itf <- vector(mode = "list", length = length(shared))
-    for (j in 1:length(shared)) {
-      for (k in 1:length(unique(as.numeric(comlab)))) {
-        if (length(intersect(membership[[k]], shared[j]))>0) {
-          itf[[j]][k] <- sum(graph[shared[j],membership[[k]]])
+  #Creates the vector of membership
+  mem <- vector()
+  if (length(membership)>0 & class(membership)=="list") {
+    for (i in 1:length(membership)) {
+      for (j in 1:length(membership[[i]])) {
+        if (i==1) {
+          mem[j] <- i
         } else {
-          itf[[j]][k] <- NA
-        }
-      }}
-    for (k in 1:length(itf)) {
-      itf[[k]][is.na(itf[[k]])] <-  0
-    }
-    names(itf) <- shared
-    
-    sumitf <- vector()
-    for (k in 1:length(itf)) {
-      sumitf[k] <- sum(abs(itf[[k]]))
-    }
-    for (k in 1:length(itf)) {
-      for (j in 1:length(itf[[k]])) {
-        if (sumitf[k] > 0) {
-          itf[[k]][j] <- abs(itf[[k]][j])/sumitf[k]
-        } else {
-          itf[[k]][j] <- 0
-        }
-      }
-    }
+          mem[length(unlist(membership[c(1:(i-1))]))+j] <- i}}}
   } else {
-    itf <- 1
+    mem <- membership
+    names(mem) <-  abbreviate(names(membership), 3)
   }
   
-  #Replaces the belonging coefficient
-  for (i in 1:length(itf)) {
-    indfac[names(itf)[[i]],] <- round(itf[[i]],2)
+  if (class(membership)=="list") {
+    names(mem) <- unlist(membership)
+    orignames <- names(mem)
   }
   
-  #Creates a list of all possible item combinations
-  parcomb <- vector("list", nrow(expand.grid(rep(list(colnames(graph)), 2))))
-  for (w in 1:nrow(expand.grid(rep(list(colnames(graph)), 2)))) {
-    parcomb[[w]][1] <- as.character(expand.grid(rep(list(colnames(graph)), 2))[w,1])
-    parcomb[[w]][2] <- as.character(expand.grid(rep(list(colnames(graph)), 2))[w,2])
+  if (length(mem[!duplicated(names(mem))])<ncol(graph)) {
+    init <- ifelse(length(mem)>0,max(mem)+1,1) 
+    mem <- unlist(c(mem, seq(from=init, to=((ncol(graph)-length(mem[!duplicated(names(mem))]))+(init-1)), by=1)))
+    names(mem) <- c(orignames, setdiff(colnames(graph), unlist(membership)))
   }
   
-  #Establishes the product of the belonging coefficients across factors
-  for (j in 1:ncol(indfac)) {
-    for (i in 1:length(parcomb)) {
-      parcomb[[i]][j+2] <- as.numeric(indfac[parcomb[[i]][1],][j])*as.numeric(indfac[parcomb[[i]][2],][j])
+  #Creates the matrix of the belonging coefficients
+  indfac <- t(matrix(vector(),length(unique(as.numeric(mem))), ncol(graph)))
+  for (i in 1:nrow(indfac)) {
+    for (j in 1:ncol(indfac)) {
+      indfac[i,j] <- sum(graph[names(mem[mem==j]==TRUE),names(mem[mem==j]==TRUE), drop=FALSE]
+                         [,which(!is.na(match(names(mem[mem==j]==TRUE),colnames(graph)[i])))])
     }}
   
-  #Calculates fuzzy modularity
-  mod <- vector()
+  #This will normalize the belonging coefficients
+  for (i in 1:nrow(indfac)) {
+    if (sum(indfac[i,])>0) {
+      indfac[i,] <- ohenery::normalize(indfac[i,])
+    }}
   
-  if (length(membership)==1 & length(isolatednodes)==0) { #If unidimensional, modularity is zero
-    modf <- 0
-  } else {
-    for (i in 1:ncol(indfac)) {
-      for (z in 1:length(parcomb)) {
-        mod <- c(mod,(as.numeric((parcomb[[z]][i+2]))*((graph[parcomb[[z]][1], parcomb[[z]][2]])-((itw[,parcomb[[z]][1]]*itw[,parcomb[[z]][2]])/(2*totnet)))))
-      }}
-    modf <- (sum(mod))/(2*totnet)
-  }
+  #This will create the belonging for isolated nodes
+  for (i in 1:nrow(indfac)) {
+    for (j in 1:ncol(indfac)) {
+      if (sum(indfac[i,]>0, na.rm = TRUE)==0 & i==j) {
+        indfac[i,mem[names(mem)==colnames(graph)[i]]] <- 1
+      }}}
   
+  indfac <- round(indfac, digits=2)
+  
+  #Calculates the matrix of the product of belonging coeffients
+  prodmat <- indfac %*% t(indfac)
+  
+  #Calculates the fuzzy modularity  
+  diag(graph) <- rep(0,ncol(graph)) 
+  m <- sum(graph)/2 # number of links
+  k <- colSums(graph) #degree
+  kk <- outer(k,k,"*") 
+  Pij <- kk/(2*m) # probability of link
+  rawmod <- as.vector((graph-Pij)*prodmat)
+  modf <- 1/(2*m)*(sum((graph-Pij)*prodmat))
   return(modf)
 }

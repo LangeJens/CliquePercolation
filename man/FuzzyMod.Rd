@@ -23,7 +23,7 @@ Function calculates the fuzzy modularity of a (disjoint or non-disjoint division
 The modularity of a graph with respect to some division is a measure of how good 
 the division is. The traditional \emph{modularity} Q was proposed by Newman and Girvan (2004):
 
-\deqn{Q=1/(2m) \sum_{c\epsilonC} \sum_{u,v\epsilonV} \delta_{cu} \delta_{cv} (A_{uv}-\frac{k_{u}k_{v}}{2m}}
+\deqn{Q=\frac{1}{2m} \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} (A_{uv}-\frac{k_{u}k_{v}}{2m}) \delta_{cu} \delta_{cv}}
 
 where m is the total number of edges, C is the set of communities corresponding to a partition,
 V is the set of vertices (i.e. nodes) in the network, \eqn{A_{uv}} is the element of the 

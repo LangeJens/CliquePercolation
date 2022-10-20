@@ -68,8 +68,6 @@
 
 FuzzyMod <- function(graph, membership, abs=TRUE) {
   
-  require(lessR)
-  
   #Transform into network if edge list from qgraph
   if(class(graph)[[1]]=='qgraph') {
     graph <- ed2ad(graph)
@@ -77,10 +75,10 @@ FuzzyMod <- function(graph, membership, abs=TRUE) {
   
   #Transform into network if edge list from igraph
   if(class(graph)[[1]]=='igraph') {
-    if(length(E(g)$weight)>0) {
-      graph <- as.matrix(as_adjacency_matrix(graph, attr="weight"))
+    if(length(igraph::E(graph)$weight)>0) {
+      graph <- as.matrix(igraph::as_adjacency_matrix(graph, attr="weight"))
     } else {
-      graph <- as.matrix(as_adjacency_matrix(graph))
+      graph <- as.matrix(igraph::as_adjacency_matrix(graph))
     }
   }
   
@@ -91,12 +89,12 @@ FuzzyMod <- function(graph, membership, abs=TRUE) {
   
   #Give names to columns and rows if not present
   if (is.null(colnames(graph))==TRUE) {
-    colnames(graph) <- to("", ncol(graph))
+    colnames(graph) <- lessR::to("", ncol(graph))
     colnames(graph) <- sub("^0+", "", colnames(graph))
   }
   
   if (is.null(rownames(graph))==TRUE) {
-    rownames(graph) <- to("", nrow(graph))
+    rownames(graph) <- lessR::to("", nrow(graph))
     rownames(graph) <- sub("^0+", "", rownames(graph))
   }
   

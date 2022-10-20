@@ -8,7 +8,7 @@
 #' @return A numeric scalar, the fuzzy modularity score for signed weighted networks of the given configuration.
 #' @examples 
 #' library(igraph)
-#' g <- make_full_graph(6) %du% make_full_graph(6)
+#' g <- igraph::make_full_graph(6) %du% igraph::make_full_graph(6)
 #' g <- add_edges(g, c(1,7, 2,8))
 #' edges <- rep(1,32)
 #' edges[31] <- -1
@@ -63,10 +63,10 @@ SignedFuzzyMod <- function(netinput, membassigned) {
   
   #Transform into network if edge list from igraph
   if(class(netinput)[[1]]=='igraph') {
-    if(length(E(g)$weight)>0) {
-      netinput <- as.matrix(as_adjacency_matrix(netinput, attr="weight"))
+    if(length(igraph::E(netinput)$weight)>0) {
+      netinput <- as.matrix(igraph::as_adjacency_matrix(netinput, attr="weight"))
     } else {
-      netinput <- as.matrix(as_adjacency_matrix(netinput))
+      netinput <- as.matrix(igraph::as_adjacency_matrix(netinput))
     }
   }
   

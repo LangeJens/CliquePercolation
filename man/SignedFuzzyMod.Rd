@@ -32,9 +32,9 @@ when weighted networks are signed, positive and negative edges cancel each other
 To deal with this limitation, Gomez, Jensen, and Arenas (2009) proposed modularity Q for signed weighted networks,
 generalised to fuzzy modularity Q for signed weighted networks:
 
-\deqn{Q=(\frac{2w^{+}}{2w^{+}+2w^{-}})(1/(2m^{+}) \sum_{c\epsilonC} \sum_{u,v\epsilonV} \alpha_{cu}^{+} \alpha_{cv}^{+} 
+\deqn{Q=(\frac{2w^{+}}{2w^{+}+2w^{-}})(1/(2m^{+}) \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} \alpha_{cu}^{+} \alpha_{cv}^{+} 
 (A_{uv}^{+}-\frac{k_{u}^{+}k_{v}^{+}}{2m})-
-(\frac{2w^{-}}{2w^{+}+2w^{-}})(1/(2m^{-}) \sum_{c\epsilonC} \sum_{u,v\epsilonV} \alpha_{cu}^{-} \alpha_{cv}^{-} 
+(\frac{2w^{-}}{2w^{+}+2w^{-}})(1/(2m^{-}) \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} \alpha_{cu}^{-} \alpha_{cv}^{-} 
 (A_{uv}^{-}-\frac{k_{u}^{-}k_{v}^{-}}{2m})}
 
 where the sign + indicates positive edge weights and the sign - indicates negative edge weights, respectively.

@@ -58,7 +58,7 @@
 #' where \eqn{\alpha_{cu}} is the \emph{belonging coefficient}. The \emph{belonging coefficient} reflects 
 #' how much the node \eqn{u} belongs to community \eqn{c}. The belonging coefficient is calculated as:
 #' 
-#' \deqn{\alpha_{cu} = \frac{k_{cu}}{\sum_{c\epsilonC}k_{cu}}}
+#' \deqn{\alpha_{cu} = \frac{k_{cu}}{\sum_{c\epsilon_C}k_{cu}}}
 #'
 #' In case of a disjoint solution, the fuzzy modularity Q proposed by Chen, Shang, Lv, and Fu (2010) reduces to the 
 #' modularity Q proposed by Newman and Girvan (2004).

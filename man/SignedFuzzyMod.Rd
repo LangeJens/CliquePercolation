@@ -41,7 +41,7 @@ where the sign + indicates positive edge weights and the sign - indicates negati
 }
 \examples{
 library(igraph)
-g <- make_full_graph(6) \%du\% make_full_graph(6)
+g <- igraph::make_full_graph(6) \%du\% igraph::make_full_graph(6)
 g <- add_edges(g, c(1,7, 2,8))
 edges <- rep(1,32)
 edges[31] <- -1

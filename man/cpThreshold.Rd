@@ -93,7 +93,7 @@ Optimizing \code{k} (clique size) and \code{I} (Intensity threshold) in clique p
   Entropy, fuzzy modularity and signed fuzzy modularity can always be determined.
 }
 \examples{
-## Example for unweighted networks
+\dontrun{## Example for unweighted networks
 
 # create qgraph object
 W <- matrix(c(0,1,1,1,0,0,0,0,
@@ -157,7 +157,7 @@ net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
 threshold <- cpThreshold(net, method = "weighted",
                          k.range = 3:4,
                          I.range = seq(0.1, 0.5, 0.01),
-                         threshold = c("entropy", "fuzzymod", "signedfuzzymod"))
+                         threshold = c("entropy", "fuzzymod", "signedfuzzymod"))}
 
 }
 \references{

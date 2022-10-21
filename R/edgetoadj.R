@@ -4,14 +4,13 @@
 #'
 #' @param netob A qgraph object.
 #' @return A matrix. Returns the adjacency matrix.
-#' @examples 
-#' library("psych")
-#' library("qgraph")
+#' @examples
+#' \dontrun{ 
 #' data(bfi)
 #' CorMat <- cor_auto(bfi[,1:25])
 #' EBICgraph <- qgraph(CorMat, graph = "glasso", sampleSize = nrow(bfi),
 #'                 tuning = 0.5, layout = "spring", title = "BIC", details = TRUE)
-#' adjmat <- ed2ad(EBICgraph)
+#' adjmat <- ed2ad(EBICgraph)}
 #' 
 #' @author Pedro Henrique Ribeiro Santiago, \email{pedro.ribeirosantiago@@adelaide.edu.au} [ctb]
 #' 

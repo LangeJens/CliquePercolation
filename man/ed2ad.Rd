@@ -16,13 +16,12 @@ A matrix. Returns the adjacency matrix.
 Convenience function to convert \link[qgraph]{qgraph} edge list to adjacency matrix.
 }
 \examples{
-library("psych")
-library("qgraph")
+\dontrun{ 
 data(bfi)
 CorMat <- cor_auto(bfi[,1:25])
 EBICgraph <- qgraph(CorMat, graph = "glasso", sampleSize = nrow(bfi),
                 tuning = 0.5, layout = "spring", title = "BIC", details = TRUE)
-adjmat <- ed2ad(EBICgraph)
+adjmat <- ed2ad(EBICgraph)}
 
 }
 \author{

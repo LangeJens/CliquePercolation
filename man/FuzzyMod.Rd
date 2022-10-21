@@ -42,7 +42,7 @@ not be calculated for non-disjoint community partitions (i.e. networks in which 
 to more than one community). As such, Chen, Shang, Lv, and Fu (2010) proposed a generalisation 
 in terms of fuzzy modularity:
 
-\deqn{Q=1/(2m) \sum_{c\epsilonC} \sum_{u,v\epsilonV} \alpha_{cu} \alpha_{cv} (A_{uv}-\frac{k_{u}k_{v}}{2m}}
+\deqn{Q=\frac{1}{2m} \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} \alpha_{cu} \alpha_{cv} (A_{uv}-\frac{k_{u}k_{v}}{2m}}
  
 where \eqn{\alpha_{cu}} is the \emph{belonging coefficient}. The \emph{belonging coefficient} reflects 
 how much the node \eqn{u} belongs to community \eqn{c}. The belonging coefficient is calculated as:
@@ -53,9 +53,8 @@ In case of a disjoint solution, the fuzzy modularity Q proposed by Chen, Shang, 
 modularity Q proposed by Newman and Girvan (2004).
 }
 \examples{
-library(igraph)
-g <- make_full_graph(5) \%du\% make_full_graph(4)
-g <- add_edges(g, c(2,6, 2,7, 2,8, 2,9))
+g <- igraph::disjoint_union(igraph::make_full_graph(5),igraph::make_full_graph(4))
+g <- igraph::add_edges(g, c(2,6, 2,7, 2,8, 2,9))
 wc <- list(c(1,2,3,4,5),c(2,6,7,8,9))
 FuzzyMod(graph=g, membership=wc, abs=TRUE)
 

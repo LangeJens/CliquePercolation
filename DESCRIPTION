@@ -2,7 +2,7 @@ Package: CliquePercolation
 Version: 0.3.0
 Date: 2021-05-28
 Title: Clique Percolation for Networks
-Description: Clique percolation community detection for weighted and 
+Description: Clique percolation community detection for weighted and
     unweighted networks as well as threshold and plotting functions.
     For more information see Farkas et al. (2007) <doi:10.1088/1367-2630/9/6/180>
     and Palla et al. (2005) <doi:10.1038/nature03607>.
@@ -29,8 +29,11 @@ Imports:
    stats,
    utils,
    parallel,
+   lessR,
+   ohenery,
+   psych,
    pbapply
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 Suggests: 
     knitr,
     rmarkdown

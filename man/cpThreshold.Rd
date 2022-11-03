@@ -9,7 +9,8 @@ cpThreshold(
   method = c("unweighted", "weighted", "weighted.CFinder"),
   k.range,
   I.range,
-  threshold = c("largest.components.ratio", "chi", "entropy")
+  threshold = c("largest.components.ratio", "chi", "entropy", "fuzzymod",
+    "signedfuzzymod")
 )
 }
 \arguments{
@@ -26,7 +27,7 @@ See \link{cpAlgorithm} for more information}
 See \link{cpAlgorithm} for more information}
 
 \item{threshold}{A string or vector indicating which threshold(s) to determine
-(\code{"largest.components.ratio", "chi", "entropy"}); see Details}
+(\code{"largest.components.ratio", "chi", "entropy", "fuzzymod", "signedfuzzymod"}); see Details}
 }
 \value{
 A data frame with columns for \code{k}, \code{I} (if \code{method = "weighted"}
@@ -35,8 +36,8 @@ A data frame with columns for \code{k}, \code{I} (if \code{method = "weighted"}
 }
 \description{
 Function for determining threshold value(s) (ratio of largest to second largest
-community sizes, chi, entropy) of ranges of \code{k} and \code{I} values to help deciding
-for optimal \code{k} and \code{I} values.
+community sizes, chi, entropy, fuzzy modularity, signed fuzzy modularity) of ranges 
+of \code{k} and \code{I} values to help deciding for optimal \code{k} and \code{I} values.
 }
 \details{
 Optimizing \code{k} (clique size) and \code{I} (Intensity threshold) in clique percolation
@@ -81,13 +82,18 @@ Optimizing \code{k} (clique size) and \code{I} (Intensity threshold) in clique p
   Initial simulation studies indicate that it consistently detects surprising community
   partitions in smaller networks especially if there are cliques of larger \code{k}.
 
+  Santiago et al. (2022) recently proposed in a simulation study that two 
+  alternative metrics, fuzzy modularity and signed fuzzy modularity, showed good performance 
+  in recovering the true community assignment in psychological networks with overlapping nodes 
+  and can also be used to help optimize \code{k} (clique size) and \code{I} (Intensity threshold).
+
   Ratio thresholds can be determined only if there are at least two communities. Chi threshold
   can be determined only if there are at least three communities. If there are not enough
   communities for the respective threshold, their values are NA in the data frame.
-  Entropy can always be determined.
+  Entropy, fuzzy modularity and signed fuzzy modularity can always be determined.
 }
 \examples{
-## Example for unweighted networks
+\dontrun{## Example for unweighted networks
 
 # create qgraph object
 W <- matrix(c(0,1,1,1,0,0,0,0,
@@ -101,8 +107,9 @@ W <- matrix(c(0,1,1,1,0,0,0,0,
 W <- Matrix::forceSymmetric(W)
 W <- qgraph::qgraph(W)
 
-# determine entropy threshold for k = 3 and k = 4
-results <- cpThreshold(W = W, method = "unweighted", k.range = c(3,4), threshold = "entropy")
+# determine entropy and fuzzy modularity thresholds for k = 3 and k = 4
+results <- cpThreshold(W = W, method = "unweighted", k.range = c(3,4), threshold = c("entropy",
+"fuzzymod")
 
 ## Example for weighted networks; three large communities with I = 0.3, 0.2, and 0.1, respectively
 
@@ -132,10 +139,12 @@ W <- matrix(c(0,0.10,0,0,0,0,0.10,0.10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 W <- Matrix::forceSymmetric(W)
 W <- qgraph::qgraph(W, layout = "spring", edge.labels = TRUE)
 
-# determine ratio, chi, and entropy thresholds for k = 3 and I from 0.3 to 0.09
+# determine ratio, chi, entropy, fuzzy modularity and signed fuzzy modularity 
+# thresholds for k = 3 and I from 0.3 to 0.09
 results <- cpThreshold(W = W, method = "weighted", k.range = 3,
                        I.range = c(seq(0.3, 0.09, by = -0.01)),
-                       threshold = c("largest.components.ratio","chi","entropy"))
+                       threshold = c("largest.components.ratio","chi","entropy",
+                       "fuzzymod","signedfuzzymod"))
 
 ## Example with Obama data set (see ?Obama)
 
@@ -145,16 +154,21 @@ data(Obama)
 # estimate network
 net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
 
-# determine entropy threshold for k from 3 to 4 and I from 0.1 to 0.5
+# determine entropy, fuzzy modularity and signed fuzzy modularity thresholds 
+# for k from 3 to 4 and I from 0.1 to 0.5
 threshold <- cpThreshold(net, method = "weighted",
                          k.range = 3:4,
                          I.range = seq(0.1, 0.5, 0.01),
-                         threshold = "entropy")
+                         threshold = c("entropy", "fuzzymod", "signedfuzzymod"))}
 
 }
 \references{
 Farkas, I., Abel, D., Palla, G., & Vicsek, T. (2007). Weighted network modules.
 \emph{New Journal of Physics, 9}, 180-180. http://doi.org/10.1088/1367-2630/9/6/180
+
+Santiago, P. H. R., Soares, G. H., Quintero, A., & Jamieson, L. (2022). \emph{The performance of 
+the Clique Percolation to identify overlapping symptoms in psychological networks}. PsyArXiv.
+https://psyarxiv.com/fk963/
 }
 \author{
 Jens Lange, \email{lange.jens@outlook.com}

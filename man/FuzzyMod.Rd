@@ -11,13 +11,15 @@ FuzzyMod(graph, membership, abs = TRUE)
 
 \item{membership}{Numeric vector or list indicating the membership structure.}
 
-\item{abs}{Should fuzzy modularity be calculated based on absolute values of network edges? Default is TRUE.}
+\item{abs}{Should fuzzy modularity be calculated based on absolute values of 
+network edges? Default is TRUE.}
 }
 \value{
 A numeric scalar, the fuzzy modularity score of the given configuration.
 }
 \description{
-Function calculates the fuzzy modularity of a (disjoint or non-disjoint division) of a graph into subgraphs.
+Function calculates the fuzzy modularity of a (disjoint or non-disjoint division)
+of a graph into subgraphs.
 }
 \details{
 The modularity of a graph with respect to some division is a measure of how good 
@@ -42,7 +44,7 @@ not be calculated for non-disjoint community partitions (i.e. networks in which 
 to more than one community). As such, Chen, Shang, Lv, and Fu (2010) proposed a generalisation 
 in terms of fuzzy modularity:
 
-\deqn{Q=\frac{1}{2m} \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} \alpha_{cu} \alpha_{cv} (A_{uv}-\frac{k_{u}k_{v}}{2m}}
+\deqn{Q=\frac{1}{2m} \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} \alpha_{cu} \alpha_{cv} (A_{uv}-\frac{k_{u}k_{v}}{2m})}
  
 where \eqn{\alpha_{cu}} is the \emph{belonging coefficient}. The \emph{belonging coefficient} reflects 
 how much the node \eqn{u} belongs to community \eqn{c}. The belonging coefficient is calculated as:

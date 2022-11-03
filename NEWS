@@ -1,3 +1,9 @@
+Changes in Version 0.4.0
+- cpThreshold now also includes the calculation of fuzzy modularity for weighted and signed networks
+- added functions FuzzyMod and SignedFuzzyMod
+- added citation information
+- updated vignette
+
 Changes in Version 0.3.0
 - changes to cpColoredGraph()
     - new argument own.colors allows to specify colors for communities or sets

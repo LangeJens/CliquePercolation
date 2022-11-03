@@ -1,6 +1,6 @@
 Package: CliquePercolation
-Version: 0.3.0
-Date: 2021-05-28
+Version: 0.4.0
+Date: 2022-11-03
 Title: Clique Percolation for Networks
 Description: Clique percolation community detection for weighted and
     unweighted networks as well as threshold and plotting functions.
@@ -10,7 +10,8 @@ Authors@R: c(
            person("Jens", "Lange", email = "lange.jens@outlook.com",
                   role = c("aut", "cre")),
            person("Janis", "Zickfeld", role = c("ctb")),
-           person("Alexander P.", "Christensen", role = c("ctb")))
+           person("Alexander P.", "Christensen", role = c("ctb")),
+           person("Pedro Henrique Ribeiro", "Santiago", role = c("ctb")))
 Maintainer: Jens Lange <lange.jens@outlook.com>
 License: GPL-3
 Encoding: UTF-8
@@ -31,7 +32,6 @@ Imports:
    parallel,
    lessR,
    ohenery,
-   psych,
    pbapply
 RoxygenNote: 7.2.1
 Suggests: 

@@ -17,9 +17,9 @@ Convenience function to convert \link[qgraph]{qgraph} edge list to adjacency mat
 }
 \examples{
 \dontrun{ 
-data(bfi)
-CorMat <- cor_auto(bfi[,1:25])
-EBICgraph <- qgraph(CorMat, graph = "glasso", sampleSize = nrow(bfi),
+data(Obama)
+CorMat <- qgraph::cor_auto(Obama[,1:25])
+EBICgraph <- qgraph::qgraph(CorMat, graph = "glasso", sampleSize = nrow(bfi),
                 tuning = 0.5, layout = "spring", title = "BIC", details = TRUE)
 adjmat <- ed2ad(EBICgraph)}
 

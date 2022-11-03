@@ -16,6 +16,11 @@
 #'         see \link{cpThreshold}}
 #' \item{cpPermuteEntropy()}{determines confidence intervals for the entropy threshold
 #'         based on random permutations of the network; see \link{cpPermuteEntropy}}
+#' \item{FuzzyMod()}{calculates the fuzzy modularity of a (disjoint or non-disjoint
+#'         division) of a graph into subgraphs; see \link{FuzzyMod}}
+#' \item{SignedFuzzyMod()}{calculates the fuzzy modularity of a (disjoint or non-disjoint
+#'         division) of a graph into subgraphs for signed weighted networks;
+#'         see \link{SignedFuzzyMod}}
 #' }
 #' 
 #' @author Jens Lange, \email{lange.jens@@outlook.com} 

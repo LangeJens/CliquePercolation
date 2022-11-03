@@ -1,10 +1,12 @@
 #' Fuzzy Modularity of a community structure of a graph
 #'
-#' Function calculates the fuzzy modularity of a (disjoint or non-disjoint division) of a graph into subgraphs.
+#' Function calculates the fuzzy modularity of a (disjoint or non-disjoint division)
+#' of a graph into subgraphs.
 #'
 #' @param graph The input graph.
 #' @param membership Numeric vector or list indicating the membership structure.
-#' @param abs Should fuzzy modularity be calculated based on absolute values of network edges? Default is TRUE.
+#' @param abs Should fuzzy modularity be calculated based on absolute values of 
+#'   network edges? Default is TRUE.
 #' @return A numeric scalar, the fuzzy modularity score of the given configuration.
 #' @examples 
 #' g <- igraph::disjoint_union(igraph::make_full_graph(5),igraph::make_full_graph(4))
@@ -53,7 +55,7 @@
 #' to more than one community). As such, Chen, Shang, Lv, and Fu (2010) proposed a generalisation 
 #' in terms of fuzzy modularity:
 #' 
-#' \deqn{Q=\frac{1}{2m} \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} \alpha_{cu} \alpha_{cv} (A_{uv}-\frac{k_{u}k_{v}}{2m}}
+#' \deqn{Q=\frac{1}{2m} \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} \alpha_{cu} \alpha_{cv} (A_{uv}-\frac{k_{u}k_{v}}{2m})}
 #'  
 #' where \eqn{\alpha_{cu}} is the \emph{belonging coefficient}. The \emph{belonging coefficient} reflects 
 #' how much the node \eqn{u} belongs to community \eqn{c}. The belonging coefficient is calculated as:
@@ -104,7 +106,7 @@ FuzzyMod <- function(graph, membership, abs=TRUE) {
   
   #Creates the vector of membership
   mem <- vector()
-  if (length(membership)>0 & class(membership)=="list") {
+  if (length(membership)>0 & isTRUE(methods::is(membership, "list"))) {
     for (i in 1:length(membership)) {
       for (j in 1:length(membership[[i]])) {
         if (i==1) {
@@ -116,7 +118,7 @@ FuzzyMod <- function(graph, membership, abs=TRUE) {
     names(mem) <-  abbreviate(names(membership), 3)
   }
   
-  if (class(membership)=="list") {
+  if (isTRUE(methods::is(membership, "list"))) {
     names(mem) <- unlist(membership)
     orignames <- names(mem)
   }

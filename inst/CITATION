@@ -1,0 +1,17 @@
+citHeader("To cite CliquePercolation in publications use:")
+
+citEntry(entry = "Article",
+  title        = "CliquePercolation: An R Package for conducting and visualizing results of the clique percolation network community detection algorithm",
+  author       = as.person("Jens Lange"),
+  journal      = "Journal of Open Source Software",
+  year         = "2021",
+  volume       = "6",
+  pages        = "3210",
+  url          = "https://doi.org/10.21105/joss.03210",
+
+  textVersion  =
+  paste("Jens Lange (2021).",
+        "CliquePercolation: An R Package for conducting and visualizing results of the clique percolation network community detection algorithm.",
+        "Journal of Open Source Software, 6, 3210.",
+        "URL https://doi.org/10.21105/joss.03210.")
+)

@@ -32,10 +32,10 @@
 #' 
 #' @details For \emph{signed} weighted networks (i.e. networks with positive and negative edges), the 
 #' calculation of the modularity Q is problematic. In unweighted networks, the original formulation 
-#' of modularity Q by Newman and Girvan (2004) included the term \eqn{frac{k_{u}}{2m}}, which
+#' of modularity Q by Newman and Girvan (2004) included the term \eqn{\frac{k_{u}}{2m}}, which
 #' is the division of node \eqn{u} degree by two times the total number of edges, indicating the probability
 #' of node \eqn{u} making connections with other nodes in the network. In weighted networks, 
-#' Fan, Li, Zhang, Wu, and Di (2007) proposed that the term \eqn{frac{k_{u}}{2m}} should be 
+#' Fan, Li, Zhang, Wu, and Di (2007) proposed that the term \eqn{\frac{k_{u}}{2m}} should be 
 #' calculated instead as the division of node \eqn{u} strength by two times the total edge weights. However, 
 #' when weighted networks are signed, positive and negative edges cancel each other out and the term 
 #' \eqn{frac{k_{u}}{2m}} loses its probabilistic meaning.

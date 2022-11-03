@@ -67,6 +67,7 @@
 #'   alternative metrics, fuzzy modularity and signed fuzzy modularity, showed good performance 
 #'   in recovering the true community assignment in psychological networks with overlapping nodes 
 #'   and can also be used to help optimize \code{k} (clique size) and \code{I} (Intensity threshold).
+#'   See \link{FuzzyMod} and \link{SignedFuzzyMod} for more information.
 #' 
 #'   Ratio thresholds can be determined only if there are at least two communities. Chi threshold
 #'   can be determined only if there are at least three communities. If there are not enough
@@ -90,7 +91,7 @@
 #' 
 #' # determine entropy and fuzzy modularity thresholds for k = 3 and k = 4
 #' results <- cpThreshold(W = W, method = "unweighted", k.range = c(3,4), threshold = c("entropy",
-#' "fuzzymod")
+#' "fuzzymod"))
 #' 
 #' ## Example for weighted networks; three large communities with I = 0.3, 0.2, and 0.1, respectively
 #' 
@@ -135,7 +136,7 @@
 #' # estimate network
 #' net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
 #' 
-#' # determine entropy, fuzzy modularity and signed fuzzy modularity thresholds 
+#' # determine entropy, fuzzy modularity, and signed fuzzy modularity thresholds 
 #' # for k from 3 to 4 and I from 0.1 to 0.5
 #' threshold <- cpThreshold(net, method = "weighted",
 #'                          k.range = 3:4,

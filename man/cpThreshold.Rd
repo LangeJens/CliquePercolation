@@ -107,7 +107,7 @@ W <- matrix(c(0,1,1,1,0,0,0,0,
 W <- Matrix::forceSymmetric(W)
 W <- qgraph::qgraph(W)
 
-# determine entropy threshold for k = 3 and k = 4
+# determine entropy and fuzzy modularity thresholds for k = 3 and k = 4
 results <- cpThreshold(W = W, method = "unweighted", k.range = c(3,4), threshold = c("entropy",
 "fuzzymod")
 
@@ -139,7 +139,8 @@ W <- matrix(c(0,0.10,0,0,0,0,0.10,0.10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 W <- Matrix::forceSymmetric(W)
 W <- qgraph::qgraph(W, layout = "spring", edge.labels = TRUE)
 
-# determine ratio, chi, and entropy thresholds for k = 3 and I from 0.3 to 0.09
+# determine ratio, chi, entropy, fuzzy modularity and signed fuzzy modularity 
+# thresholds for k = 3 and I from 0.3 to 0.09
 results <- cpThreshold(W = W, method = "weighted", k.range = 3,
                        I.range = c(seq(0.3, 0.09, by = -0.01)),
                        threshold = c("largest.components.ratio","chi","entropy",
@@ -153,7 +154,8 @@ data(Obama)
 # estimate network
 net <- qgraph::EBICglasso(qgraph::cor_auto(Obama), n = nrow(Obama))
 
-# determine entropy threshold for k from 3 to 4 and I from 0.1 to 0.5
+# determine entropy, fuzzy modularity and signed fuzzy modularity thresholds 
+# for k from 3 to 4 and I from 0.1 to 0.5
 threshold <- cpThreshold(net, method = "weighted",
                          k.range = 3:4,
                          I.range = seq(0.1, 0.5, 0.01),

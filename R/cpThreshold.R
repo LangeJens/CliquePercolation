@@ -66,13 +66,13 @@
 #'   Santiago et al. (2022) recently proposed in a simulation study that two 
 #'   alternative metrics, fuzzy modularity and signed fuzzy modularity, showed good performance 
 #'   in recovering the true community assignment in psychological networks with overlapping nodes 
-#'   and can also be used to help optimize \code{k} (clique size) and \code{I} (Intensity threshold).
+#'   and can also be used to optimize \code{k} (clique size) and \code{I} (Intensity threshold).
 #'   See \link{FuzzyMod} and \link{SignedFuzzyMod} for more information.
 #' 
 #'   Ratio thresholds can be determined only if there are at least two communities. Chi threshold
 #'   can be determined only if there are at least three communities. If there are not enough
 #'   communities for the respective threshold, their values are NA in the data frame.
-#'   Entropy, fuzzy modularity and signed fuzzy modularity can always be determined.   
+#'   Entropy, fuzzy modularity, and signed fuzzy modularity can always be determined.   
 #' 
 #' @examples
 #' \dontrun{## Example for unweighted networks
@@ -121,7 +121,7 @@
 #' W <- Matrix::forceSymmetric(W)
 #' W <- qgraph::qgraph(W, layout = "spring", edge.labels = TRUE)
 #' 
-#' # determine ratio, chi, entropy, fuzzy modularity and signed fuzzy modularity 
+#' # determine ratio, chi, entropy, fuzzy modularity, and signed fuzzy modularity 
 #' # thresholds for k = 3 and I from 0.3 to 0.09
 #' results <- cpThreshold(W = W, method = "weighted", k.range = 3,
 #'                        I.range = c(seq(0.3, 0.09, by = -0.01)),

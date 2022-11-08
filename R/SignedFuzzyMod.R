@@ -6,14 +6,14 @@
 #' @param netinput The input graph.
 #' @param membassigned Numeric vector or list indicating the membership structure.
 #' @return A numeric scalar, the fuzzy modularity score for signed weighted networks of the given configuration.
-#' @examples 
-#' library(igraph)
+#' @examples
+#' `%du%` <- igraph::`%du%` 
 #' g <- igraph::make_full_graph(6) %du% igraph::make_full_graph(6)
-#' g <- add_edges(g, c(1,7, 2,8))
+#' g <- igraph::add_edges(g, c(1,7, 2,8))
 #' edges <- rep(1,32)
 #' edges[31] <- -1
-#' E(g)$weight <- edges
-#' plot(g, edge.label=round(E(g)$weight, 3))
+#' igraph::E(g)$weight <- edges
+#' plot(g, edge.label=round(igraph::E(g)$weight, 3))
 #' wc <- list(c(1,2,3,4,5,6),c(7,8,9,10,11,12))
 #' SignedFuzzyMod(netinput=g, membassigned=wc)
 #' 
@@ -36,7 +36,7 @@
 #' (Fan, Li, Zhang, Wu, & Di, 2007), the term \eqn{\frac{k_{u}}{2m}} indicates the probability of 
 #' node \eqn{u} making connections with other nodes in the network, if connections between nodes 
 #' were random. Gomez, Jensen, and Arenas (2009) discuss how, when networks are signed, the 
-#' positive and negative edges cancel each other out and the term \eqn{frac{k_{u}}{2m}} loses its 
+#' positive and negative edges cancel each other out and the term \eqn{\frac{k_{u}}{2m}} loses its 
 #' probabilistic meaning. To deal with this limitation, Gomez, Jensen, and Arenas (2009) proposed modularity Q for signed 
 #' weighted networks, generalised to fuzzy modularity Q for signed weighted networks:
 #' 

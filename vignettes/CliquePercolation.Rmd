@@ -447,7 +447,20 @@ summary(cpk3)
 
 we see that we indeed have three communities, one entailing nodes $a$, $b$, $c$, and $d$, one entailing nodes $d$, $e$, and $f$, and one entailing nodes $f$, $g$, $h$, and $i$. We further see that nodes $d$ and $f$ are shared nodes and that node $j$ is isolated.
 
-We could have also requested the fuzzymod threshold for such a small network.
+We could have also requested the fuzzymod threshold for such a small network using
+
+```{r, echo = TRUE, results = FALSE}
+thresholds.small.fuzzymod <- cpThreshold(W, method = "unweighted", k.range = c(3,4),
+                                         threshold = c("entropy","fuzzymod"))
+```
+
+We can again inspect the results with
+
+```{r, echo = TRUE}
+thresholds.small.fuzzymod
+```
+
+showing that fuzzy modularity favors the same $k$ and $I$. One advantage, however, is that we do not need to run any permuation test for fuzzy modularity.
 
 Finally, we would like to plot the results of the clique percolation algorithm. However, using the community graph for a network with only three communities would not be very informative. In the current case, the community network would have three nodes with two edges. For very small networks, an alternative may be reasonable, namely plotting the community partition directly on the original network that was analyzed. This can be achieved with the `cpColoredGraph` function. It takes the community partition from `cpAlgorithm` and assigns qualitatively different colors to the communities with the help of the **colorspace** package [@Zeileis+et+al:subm]. It is based on the HCL color space, generating palettes of colors that are rather balanced and visually pleasing. Isolated nodes will be displayed white. Shared nodes will be divided in multiple colors, one for each community they belong to.
 Original **qgraph** arguments can be used to make the network appear as before.

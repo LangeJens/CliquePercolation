@@ -1,6 +1,6 @@
 Package: CliquePercolation
 Version: 0.4.0
-Date: 2022-11-03
+Date: 2022-11-08
 Title: Clique Percolation for Networks
 Description: Clique percolation community detection for weighted and
     unweighted networks as well as threshold and plotting functions.

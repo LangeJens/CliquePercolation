@@ -72,11 +72,11 @@ Chen, D., Shang, M., Lv, Z., & Fu, Y. (2010). Detecting overlapping communities 
 via a local algorithm. \emph{Physica A: Statistical Mechanics and its Applications}, 389(19), 4177-4187.
 }
 \author{
-Pedro Henrique Ribeiro Santiago, \email{pedro.ribeirosantiago@adelaide.edu.au} [ctb]
+Pedro Henrique Ribeiro Santiago, \email{phrs16@gmail.edu.au} [ctb]
 
-Gustavo Hermes Soares, \email{gustavo.soares@adelaide.edu.au} [rev]
+Gustavo Hermes Soares, [rev]
 
-Adrian Quintero, \email{adrianquintero987@hotmail.com} [rev]
+Adrian Quintero, [rev]
 
-Lisa Jamieson, \email{lisa.jamieson@adelaide.edu.au} [rev]
+Lisa Jamieson, [rev]
 }

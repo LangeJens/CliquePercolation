@@ -22,26 +22,23 @@
 #' Gomez, S., Jensen, P., & Arenas, A. (2009). Analysis of community structure in networks of correlated data. 
 #' \emph{Physical review E}, 80(1), 016114. 
 #' 
-#' @author Pedro Henrique Ribeiro Santiago, \email{pedro.ribeirosantiago@@adelaide.edu.au} [ctb]
+#' @author Pedro Henrique Ribeiro Santiago, \email{phrs16@@gmail.com} [ctb]
 #' 
-#' Gustavo Hermes Soares, \email{gustavo.soares@@adelaide.edu.au} [rev]
+#' Gustavo Hermes Soares, [rev]
 #' 
-#' Adrian Quintero, \email{adrianquintero987@@hotmail.com} [rev]
+#' Adrian Quintero, [rev]
 #' 
-#' Lisa Jamieson, \email{lisa.jamieson@@adelaide.edu.au} [rev] 
+#' Lisa Jamieson, [rev] 
 #' 
 #' @details For \emph{signed} weighted networks (i.e. networks with positive and negative edges), the 
-#' calculation of the modularity Q is problematic. In unweighted networks, the original formulation 
-#' of modularity Q by Newman and Girvan (2004) included the term \eqn{\frac{k_{u}}{2m}}, which
-#' is the division of node \eqn{u} degree by two times the total number of edges, indicating the probability
-#' of node \eqn{u} making connections with other nodes in the network. In weighted networks, 
-#' Fan, Li, Zhang, Wu, and Di (2007) proposed that the term \eqn{\frac{k_{u}}{2m}} should be 
-#' calculated instead as the division of node \eqn{u} strength by two times the total edge weights. However, 
-#' when weighted networks are signed, positive and negative edges cancel each other out and the term 
-#' \eqn{frac{k_{u}}{2m}} loses its probabilistic meaning.
-#' 
-#' To deal with this limitation, Gomez, Jensen, and Arenas (2009) proposed modularity Q for signed weighted networks,
-#' generalised to fuzzy modularity Q for signed weighted networks:
+#' calculation of the modularity Q is problematic. Gomez, Jensen, and Arenas (2009) explain that, 
+#' when calculating modularity Q for unweighted (Newman & Girvan, 2004) or weighted networks 
+#' (Fan, Li, Zhang, Wu, & Di, 2007), the term \eqn{\frac{k_{u}}{2m}} indicates the probability of 
+#' node \eqn{u} making connections with other nodes in the network, if connections between nodes 
+#' were random. Gomez, Jensen, and Arenas (2009) discuss how, when networks are signed, the 
+#' positive and negative edges cancel each other out and the term \eqn{frac{k_{u}}{2m}} loses its 
+#' probabilistic meaning. To deal with this limitation, Gomez, Jensen, and Arenas (2009) proposed modularity Q for signed 
+#' weighted networks, generalised to fuzzy modularity Q for signed weighted networks:
 #' 
 #' \deqn{Q=(\frac{2w^{+}}{2w^{+}+2w^{-}})(\frac{1}{2m^{+}}) \sum_{c\epsilon_C} \sum_{u,v\epsilon_V} \alpha_{cu}^{+} \alpha_{cv}^{+} 
 #' (A_{uv}^{+}-\frac{k_{u}^{+}k_{v}^{+}}{2m})-
@@ -58,7 +55,7 @@ SignedFuzzyMod <- function(netinput, membassigned) {
   
   #Transform into network if edge list from qgraph
   if(class(netinput)[1]=='qgraph') {
-    netinput <- ed2ad(netinput)
+    netinput <- qgraph::getWmat(netinput)
   }
   
   #Transform into network if edge list from igraph
@@ -79,7 +76,7 @@ SignedFuzzyMod <- function(netinput, membassigned) {
       }}}
   colnames(netpos) <- colnames(netinput)
   rownames(netpos) <- rownames(netinput)
-  if (any(netpos[netpos!=0])) {
+  if (length(netpos[netpos!=0])>0) {
     modPos <- FuzzyMod(graph=netpos, membership=membassigned, abs=FALSE) 
   } else {
     modPos <- 0
@@ -95,7 +92,7 @@ SignedFuzzyMod <- function(netinput, membassigned) {
       }}}
   colnames(netneg) <- colnames(netinput)
   rownames(netneg) <- rownames(netinput)
-  if (any(netneg[netneg!=0])) {
+  if (length(netneg[netneg!=0])>0) {
     modNeg <- FuzzyMod(graph=netneg, membership=membassigned, abs=FALSE)
   } else {
     modNeg <- 0

@@ -25,13 +25,13 @@
 #' Chen, D., Shang, M., Lv, Z., & Fu, Y. (2010). Detecting overlapping communities of weighted networks 
 #' via a local algorithm. \emph{Physica A: Statistical Mechanics and its Applications}, 389(19), 4177-4187. 
 #' 
-#' @author Pedro Henrique Ribeiro Santiago, \email{pedro.ribeirosantiago@@adelaide.edu.au} [ctb]
+#' @author Pedro Henrique Ribeiro Santiago, \email{phrs16@@gmail.edu.au} [ctb]
 #' 
-#' Gustavo Hermes Soares, \email{gustavo.soares@@adelaide.edu.au} [rev]
+#' Gustavo Hermes Soares, [rev]
 #' 
-#' Adrian Quintero, \email{adrianquintero987@@hotmail.com} [rev]
+#' Adrian Quintero, [rev]
 #' 
-#' Lisa Jamieson, \email{lisa.jamieson@@adelaide.edu.au} [rev]
+#' Lisa Jamieson, [rev]
 #' 
 #' @details The modularity of a graph with respect to some division is a measure of how good 
 #' the division is. The traditional \emph{modularity} Q was proposed by Newman and Girvan (2004):
@@ -71,7 +71,7 @@ FuzzyMod <- function(graph, membership, abs=TRUE) {
   
   #Transform into network if edge list from qgraph
   if(class(graph)[[1]]=='qgraph') {
-    graph <- ed2ad(graph)
+    graph <- qgraph::getWmat(graph)
   }
   
   #Transform into network if edge list from igraph

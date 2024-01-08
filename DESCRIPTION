@@ -16,6 +16,7 @@ Maintainer: Jens Lange <lange.jens@outlook.com>
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+BugReports: https://github.com/LangeJens/CliquePercolation/issues
 Depends:
    R (>= 3.6.0)
 Imports:
